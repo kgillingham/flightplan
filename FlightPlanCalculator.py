@@ -2,11 +2,15 @@
 # Specifically, this program will calculate the location, direction, and number of flight lines
 # necessary to adequately photograph a given area, as well as the elevation the aircraft should fly at. 
 
-# import math module for the radians function
+# import math module for various trigonmetric functions
 import math
 
 def main():
-    
+
+    # radius of the Earth, in meters
+    # this can be a global variable as it will not change
+    radius = 6.3781e6
+
     coords = [[] for x in range(4)]
 
     # get 4 lat long pairs from the user, store in list
@@ -19,7 +23,7 @@ def main():
     coords[3].append(float(input("Point 4 latitude: ")))
     coords[3].append(float(input("Point 4 longitude: ")))
 
-    # convert degrees to radians
+    # convert degrees to radians, store in list
     rcoords = [[] for x in range(4)]
     for x in range(len(coords)):
         for y in range(len(coords[0])):
@@ -27,12 +31,9 @@ def main():
 
     # pass radian values to haversine function
     distance = haversine(rcoords)
-    print(distance)
 
 
 def haversine(coordinates):
-
-    radius = 6.3781e6
 
     difflat1 = abs(coordinates[0][0] - coordinates[1][0])
     difflong1 = abs(coordinates[0][1] - coordinates[1][1])
@@ -53,6 +54,17 @@ def haversine(coordinates):
         width = a2
     
     return length, width
+
+# This function assumes angles are in radians.
+# Pass it the coordinates of the point furthest to the south west, or furthest to the west.
+# Pass it the bearing of the long side of the rectangle in the direction of the 
+# southern point to the northern point. If the points are on an E-W line, 
+# 
+def startingcoords(initCoords, numFlightLines, lineDistance, bearing):
+    
+    # angular distance
+    distance = lineDistance / radius
+
 
 
 if __name__ == "__main__":
