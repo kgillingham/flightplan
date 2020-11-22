@@ -6,8 +6,6 @@
 import math
 
 def main():
-
-    radius = 6.3781e6
     
     coords = [[] for x in range(4)]
 
@@ -21,8 +19,6 @@ def main():
     coords[3].append(float(input("Point 4 latitude: ")))
     coords[3].append(float(input("Point 4 longitude: ")))
 
-    print(len(coords), len(coords[0]))
-
     # convert degrees to radians
     rcoords = [[] for x in range(4)]
     for x in range(len(coords)):
@@ -30,12 +26,34 @@ def main():
             rcoords[x].append(math.radians(coords[x][y]))
 
     # pass radian values to haversine function
-    haversine(rcoords)
+    distance = haversine(rcoords)
+    print(distance)
 
-# TO DO
+
 def haversine(coordinates):
 
-    print('test')
+    radius = 6.3781e6
+
+    difflat1 = abs(coordinates[0][0] - coordinates[1][0])
+    difflong1 = abs(coordinates[0][1] - coordinates[1][1])
+    difflat2 = abs(coordinates[2][0] - coordinates[1][0])
+    difflong2 = abs(coordinates[2][1] - coordinates[1][1])
+
+    a1 = math.sin(difflat1/2)**2 + math.cos(coordinates[2][0]) * math.cos(coordinates[1][0]) * math.sin(difflong1/2)**2
+    a2 = 2 * radius * math.atan2(math.sqrt(a1), math.sqrt(1 - a1))
+
+    b1 = math.sin(difflat2/2)**2 + math.cos(coordinates[2][0]) * math.cos(coordinates[1][0]) * math.sin(difflong2/2)**2
+    b2 = 2 * radius * math.atan2(math.sqrt(b1), math.sqrt(1 - b1))
+
+    if a2 >= b2:
+        length = a2
+        width = b2
+    else:
+        length = b2
+        width = a2
+    
+    return length, width
+
 
 if __name__ == "__main__":
     main()
