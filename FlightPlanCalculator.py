@@ -5,7 +5,6 @@
 # import math module for various trigonmetric functions
 import math
 
->>>>>>> 3a986c59a157e5447ce2fd902c9b81b70511c668
 def main():
 
     # radius of the Earth, in meters
