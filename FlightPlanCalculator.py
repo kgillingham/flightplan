@@ -117,7 +117,7 @@ elif cameratype == "D":
     acrosstrack = float(input("What is the number of pixels in the across-track sensor array? (e.g. 20010): "))
     alongtrack = float(input("What is the number of pixels in the along-track sensor array? (e.g. 13080): "))
     pixelsize = float(input("In millimetres, whaty is the physical size of each pixel? (e.g. 0.0052): "))
-    gsd = float(input("In metres, what is the ground smapling distance? (e.g. 0.25): ")
+    gsd =  float(input("In metres, what is the ground smapling distance? (e.g. 0.25): ")
     #Calcualte digital camera specific variables
     flyingheight = ((gsd*focallength)/pixelsize)+elevation
     heightaboveterrain = flyingheight-elevation 
