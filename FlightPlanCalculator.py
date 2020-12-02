@@ -6,7 +6,11 @@ print("Specifically, this program will calculate the location, direction, and nu
 print("necessary to adequately photograph a given area, as well as the elevation the aircraft should fly at.")
 
 # import math module for various trigonmetric functions
+# import csv module to read and write csv files
 import math
+import csv
+
+
 
 def haversine(coordinates):
 
@@ -41,10 +45,83 @@ def startingcoords(initCoords, numFlightLines, lineDistance, bearing):
     distance = lineDistance / radius
 
 
+# Define input loop to get csv file and append to lists
+def input_loop():
+
+    ######## sarah: Add in the specifications how how the csv should be etc. etc. ######
+    ####################################################################################
+
+    cameratype = input("Will the camera be digital (D) or film (F)?: ")
+
+    if cameratype.upper() == "F":
+        # Create output csv file with all final outputs
+        with open("FlightPlan-FilmOutput.csv", "a") as output_data:
+            headerwriter = csv.writer(output_data)
+            headerwriter.writerow([ ### all ouput headers here lol ###  ])
+
+        # Following section by Sarah
+        # Non-specific to camera type lists
+        focallength = []         # create empty list for focallength
+        elevation = []           # create empty list for elevation
+        endlap = []              # create empty list for endlap
+        sidelap = []             # create empty list for sidelap
+        speed = []               # create empty list for speed
+        cameratype = []  # if they are doing different project?? may be unneccessary. Could assume all would be D or F
+
+        # Following section by Sarah
+        # Lists for Film
+        filmformatsizeinput = []    # create empty list for film format size input
+        filmformatsize = []         # create empty list for calculated film format size  
+        scaleinput = []             # create empty list for scale input
+        scale = []                  # create empty list for calculated scale
+        flyingheight = []           # create empty list for flying height
+        singleimagegc = []          # create empty list for single image ground coverage
+        groundphotosep = []         # create empty list for ground photo separation
+        exposuretime = []           # create empty list for exposure time
+        adjustedgroundphotosep = [] # create empty list for adjusted ground photo separation
+        photosperline = []          # create empty list for number of photos per line
+        distancebwlines = []        # create empty list for distance between lines
+        flightlines = []            # create empty list for number of flight lines
+        totalphotos = []            # create empty list for total photos
+    elif cameratype.upper() == "D":
+        # Create output csv file with all final outputs
+        with open("FlightPlan-DigitalOutput.csv", "a") as output_data:
+            headerwriter = csv.writer(output_data)
+            headerwriter.writerow([ ### all ouput headers here lol ###  ])
+
+        # Following section by Sarah
+        # Non-specific to camera type lists
+        focallength = []         # create empty list for focallength
+        elevation = []           # create empty list for elevation
+        endlap = []              # create empty list for endlap
+        sidelap = []             # create empty list for sidelap
+        speed = []               # create empty list for speed
+        cameratype = []  # if they are doing different project?? may be unneccessary. Could assume all would be D or F
+    
+        # Following section by Sarah
+        # Lists for Digital
+        acrosstrack = []            # create empty list for across track ground coverage
+        alongtrack = []             # create empty list for along track ground coverage
+        pixelsize = []              # create empty list for pixel size 
+        gsd = []                    # create empty list for ground sampling distance (?)
+        flyingheight = []           # create empty list for flying height
+        heightaboveterrain = []     # create empty list for height above the terrain
+        acrosscoverage = []         # create empty list for across track coverage
+        alongcoverage = []          # create empty list for along track coverage
+        groundphotosep = []         # create empty list for ground photo separation
+        exposuretime = []           # create empty list for exposure time
+        photosperline = []          # create empty list for number of photos per line
+        distancebwlines = []        # create empty list for distance between lines
+        flightlines = []            # create empty list for number of light lines
+        totalphotos = []            # create empty list for total photos
+
+
+
 def main():
 
     # radius of the Earth, in meters
     # this can be a global variable as it will not change
+    
     radius = 6.3781e6
 
     coords = [[] for x in range(4)]
@@ -68,14 +145,6 @@ def main():
     # pass radian values to haversine function
     distance = haversine(rcoords)
 
-    # Following section by Sarah
-    # Non-specific to camera type lists
-    focallength = []         # create empty list for focallength
-    elevation = []           # create empty list for elevation
-    endlap = []              # create empty list for endlap
-    sidelap = []             # create empty list for sidelap
-    speed = []               # create empty list for speed
-    cameratype = []  # if they are doing different project?? may be unneccessary. Could assume all would be D or F
 
     # Following section by Sarah
     # Get user inputs for values non-specific to camera type and store in unique variables
@@ -92,22 +161,6 @@ def main():
     print()
     cameratype = input("Will the camera be digital (D) or film (F)?: ")
     
-    
-    # Following section by Sarah
-    # Lists for Film
-    filmformatsizeinput = []    # create empty list for film format size input
-    filmformatsize = []         # create empty list for calculated film format size  
-    scaleinput = []             # create empty list for scale input
-    scale = []                  # create empty list for calculated scale
-    flyingheight = []           # create empty list for flying height
-    singleimagegc = []          # create empty list for single image ground coverage
-    groundphotosep = []         # create empty list for ground photo separation
-    exposuretime = []           # create empty list for exposure time
-    adjustedgroundphotosep = [] # create empty list for adjusted ground photo separation
-    photosperline = []          # create empty list for number of photos per line
-    distancebwlines = []        # create empty list for distance between lines
-    flightlines = []            # create empty list for number of flight lines
-    totalphotos = []            # create empty list for total photos
 
     #Selection case for camera type input
     #If input is Film camera
