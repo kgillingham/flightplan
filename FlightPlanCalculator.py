@@ -85,13 +85,10 @@ def main():
     speed = int(input("In kilometres/hour, what is the average ground speed of the aircraft? (e.g. 160): "))
     print()
     cameratype = input("Will the camera be digital (D) or film (F)?: ")
-    cameratype = cameratype.upper()
-
-
 
     #Selection case for camera type input
     #If input is Film camera
-    if cameratype == "F":
+    if cameratype.upper() == "F":
         #Get inputs for film camera specific variahbles
         filmformatsizeinput = float(input("In millimetres, what is the film format size? (e.g. 230): "))
         filmformatsize = filmformatsizeinput/1000
@@ -126,7 +123,7 @@ def main():
 
     #Selection case for camera type input
     #If input is digital camera
-    elif cameratype == "D":
+    elif cameratype.upper() == "D":
         #Get inputs for digital camera specific variables
         acrosstrack = float(input("What is the number of pixels in the across-track sensor array? (e.g. 20010): "))
         alongtrack = float(input("What is the number of pixels in the along-track sensor array? (e.g. 13080): "))
