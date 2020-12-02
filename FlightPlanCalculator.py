@@ -68,23 +68,46 @@ def main():
     # pass radian values to haversine function
     distance = haversine(rcoords)
 
+    # Following section by Sarah
+    # Non-specific to camera type lists
+    focallength = []         # create empty list for focallength
+    elevation = []           # create empty list for elevation
+    endlap = []              # create empty list for endlap
+    sidelap = []             # create empty list for sidelap
+    speed = []               # create empty list for speed
+    cameratype = []  # if they are doing different project?? may be unneccessary. Could assume all would be D or F
 
-
+    # Following section by Sarah
     # Get user inputs for values non-specific to camera type and store in unique variables
-
-    focallength = float(input("In millimetres, what is the focal length of the camera? (e.g. 152.4): "))
+    focallength.append(float(input("In millimetres, what is the focal length of the camera? (e.g. 152.4): ")))
     print()
     print("For the purpose of this calculation, it is assumed that elevation will not vary over the desired study area.")
-    elevation = int(input("In metres above sea level, what is the average terrain elevation above the datum? (e.g. 300): "))
+    elevation.append(int(input("In metres above sea level, what is the average terrain elevation above the datum? (e.g. 300): ")))
     print()
-    endlap = float(input("As a percent, what is the desired amount of endlap? (e.g. 0.60): "))
+    endlap.append(float(input("As a percent, what is the desired amount of endlap? (e.g. 0.60): ")))
     print()
-    sidelap = float(input("As a percent, what is the desired amount of sidelap? (e.g. 0.30): "))
+    sidelap.append(float(input("As a percent, what is the desired amount of sidelap? (e.g. 0.30): ")))
     print()
-    print("For the purpose of this calculation, it is assumed that the speed of the aircraft will not vary during flight over the desired study area. ")
     speed = int(input("In kilometres/hour, what is the average ground speed of the aircraft? (e.g. 160): "))
     print()
     cameratype = input("Will the camera be digital (D) or film (F)?: ")
+    
+    
+    # Following section by Sarah
+    # Lists for Film
+    filmformatsizeinput = []    # create empty list for film format size input
+    filmformatsize = []         # create empty list for calculated film format size  
+    scaleinput = []             # create empty list for scale input
+    scale = []                  # create empty list for calculated scale
+    flyingheight = []           # create empty list for flying height
+    singleimagegc = []          # create empty list for single image ground coverage
+    groundphotosep = []         # create empty list for ground photo separation
+    exposuretime = []           # create empty list for exposure time
+    adjustedgroundphotosep = [] # create empty list for adjusted ground photo separation
+    photosperline = []          # create empty list for number of photos per line
+    distancebwlines = []        # create empty list for distance between lines
+    flightlines = []            # create empty list for number of flight lines
+    totalphotos = []            # create empty list for total photos
 
     #Selection case for camera type input
     #If input is Film camera
@@ -120,6 +143,23 @@ def main():
         photosperline, ". /n")
         print("The total number of photographs taken will be ", totalphotos, ".")
 
+
+    # Following section by Sarah
+    # Lists for Digital
+    acrosstrack = []            # create empty list for across track ground coverage
+    alongtrack = []             # create empty list for along track ground coverage
+    pixelsize = []              # create empty list for pixel size 
+    gsd = []                    # create empty list for ground sampling distance (?)
+    flyingheight = []           # create empty list for flying height
+    heightaboveterrain = []     # create empty list for height above the terrain
+    acrosscoverage = []         # create empty list for across track coverage
+    alongcoverage = []          # create empty list for along track coverage
+    groundphotosep = []         # create empty list for ground photo separation
+    exposuretime = []           # create empty list for exposure time
+    photosperline = []          # create empty list for number of photos per line
+    distancebwlines = []        # create empty list for distance between lines
+    flightlines = []            # create empty list for number of light lines
+    totalphotos = []            # create empty list for total photos
 
     #Selection case for camera type input
     #If input is digital camera
