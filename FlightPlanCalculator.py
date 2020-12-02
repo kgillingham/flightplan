@@ -117,7 +117,7 @@ def input_loop():
 
 
 
-def main():
+def calculation_loop():
 
     # radius of the Earth, in meters
     # this can be a global variable as it will not change
@@ -196,24 +196,6 @@ def main():
         photosperline, ". /n")
         print("The total number of photographs taken will be ", totalphotos, ".")
 
-
-    # Following section by Sarah
-    # Lists for Digital
-    acrosstrack = []            # create empty list for across track ground coverage
-    alongtrack = []             # create empty list for along track ground coverage
-    pixelsize = []              # create empty list for pixel size 
-    gsd = []                    # create empty list for ground sampling distance (?)
-    flyingheight = []           # create empty list for flying height
-    heightaboveterrain = []     # create empty list for height above the terrain
-    acrosscoverage = []         # create empty list for across track coverage
-    alongcoverage = []          # create empty list for along track coverage
-    groundphotosep = []         # create empty list for ground photo separation
-    exposuretime = []           # create empty list for exposure time
-    photosperline = []          # create empty list for number of photos per line
-    distancebwlines = []        # create empty list for distance between lines
-    flightlines = []            # create empty list for number of light lines
-    totalphotos = []            # create empty list for total photos
-
     #Selection case for camera type input
     #If input is digital camera
     elif cameratype.upper() == "D":
@@ -254,14 +236,16 @@ def main():
     else:
         Print("Please check your input. Enter 'F' for film camera and 'D' for digital camera")
 
-
-
     # call functions for calculations
 
     # print results on screen or in file??? if doing multiple entries from csv file, perhaps write to one?
 
+def output_loop():
 
-
+def main():
+    input_loop()
+    calculation_loop()
+    output_loop()
 
 if __name__ == "__main__":
     main()
