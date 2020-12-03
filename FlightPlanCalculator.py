@@ -11,28 +11,20 @@
 import math
 import csv
 
-#Display Program Purpose
-print("This program will aid the designing process of an aerial photography remote sensing mission.") 
-print("Specifically, this program will calculate the location, direction, and number of flight lines")
-print("necessary to adequately photograph a given area, as well as the elevation the aircraft should fly at.")
-
 ###########################################  Start of inputs #################################################
-
-# Get input for camera type
-cameratype = input("Will the camera be digital (D) or film (F)?: ")
 
 
 ################ Global variable lists to be accessed ##################
 # Non-specific to camera type lists
-focallength = []         # create empty list for focallength
-elevation = []           # create empty list for elevation
-endlap = []              # create empty list for endlap
-sidelap = []             # create empty list for sidelap
-speed = []               # create empty list for speed
+focallength = []              # create empty list for focallength
+elevation = []                # create empty list for elevation
+endlap = []                   # create empty list for endlap
+sidelap = []                  # create empty list for sidelap
+speed = []                    # create empty list for speed
 # # Lists for Film
-filmformatsizeinput = []    # create empty list for film format size input
+filmformatsizeinput = []      # create empty list for film format size input
 # filmformatsize = []         # create empty list for calculated film format size  
-scaleinput = []             # create empty list for scale input
+scaleinput = []               # create empty list for scale input
 # scale = []                  # create empty list for calculated scale
 # flyingheight = []           # create empty list for flying height
 # singleimagegc = []          # create empty list for single image ground coverage
@@ -44,10 +36,10 @@ scaleinput = []             # create empty list for scale input
 # flightlines = []            # create empty list for number of flight lines
 # totalphotos = []            # create empty list for total photos
 # # Lists for Digital
-acrosstrack = []            # create empty list for across track ground coverage
-alongtrack = []             # create empty list for along track ground coverage
-pixelsize = []              # create empty list for pixel size 
-gsd = []                    # create empty list for ground sampling distance (?)
+acrosstrack = []              # create empty list for across track ground coverage
+alongtrack = []               # create empty list for along track ground coverage
+pixelsize = []                # create empty list for pixel size 
+gsd = []                      # create empty list for ground sampling distance (?)
 # flyingheight = []           # create empty list for flying height
 # heightaboveterrain = []     # create empty list for height above the terrain
 # acrosscoverage = []         # create empty list for across track coverage
@@ -61,7 +53,7 @@ gsd = []                    # create empty list for ground sampling distance (?)
 
 # Define global variables 
 radius = 6.3781e6
-output_path = None      # Used to call output csv file in Loop
+output_path = None            # Used to call output csv file in Loop
 
 def haversine(coordinates):
 
@@ -98,58 +90,99 @@ def startingcoords(initCoords, numFlightLines, lineDistance, bearing):
 
 # Input loop if cameratype is Film
 def Film_input_loop():
-    ######## sarah: Add in the specifications how how the csv should be etc. etc. ######
-    ####################################################################################
-    input_path = str(input("Please enter the path to your input data csv file:  "))
-    with open(input_path, "r") as input_data:
-        input_read = csv.reader(input_data)
-        header = next(input_read)
-        for record in input_read:
-            focallength.append(float(record[0]))
-            elevation.append(float(record[1]))
-            endlap.append(float(record[2]))
-            sidelap.append(float(record[3]))
-            speed.append(float(record[4]))
-            filmformatsizeinput.append(float(record[5]))
-            scaleinput.append(float(record[6]))
-    # Call global csv variable and assign name depending on camera type
-    output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
-    global output_path  
-    output_path = open(output_location + "\\FlightPlan-FilmOutput.csv", "w")
-    with open(output_path, "a") as output_data:
-        headwriter = csv.writer(output_data)
-        headwriter.writerow(["Camera_Type", "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
-        "Film_Format_Size(mm)", "Scale_(1:  )","", "Flying_Height(meters_above_terrain)", "Flying_Height_Above_Sea_Level(m)" "",
-         "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+    print()
+    # Ensure user has prepared csv correctly prior to import
+    print("Prior to importing this program, please ensure your data has been entered following the requirements:")
+    print("Film Format Size = mm (e.g. 230)")
+    print("Desired Scale = denominator only (e.g. 25000)")
+    print("Focal Length = mm (e.g. 152.4)")
+    print("Average Terrain Elevation Above Datum = metres above sea level (e.g. 300)")
+    print("Endlap  = percantage as decimal (e.g. 0.60)")
+    print("Sidelap = percentage as decimal (e.g. 0.30)")
+    print("Average Ground Speed of Plane = km/hr (e.g. 160)")
+    print("Ground Sampling Distance = m (e.g. 0.25)")    
+    print()
+    userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
+    print()
+    # Thinking is hard today. Would while and break work for our loop instead of if/else? 
+    # I can't think of how to get it to loop back up to get inputs while doing something with while
+    # So long as the break stops it from doing it more than once?? I don't really remember how breaks work haha
+    # while userready.upper() == "Y":
+    if userready.upper() == "Y":
+        input_path = str(input("Please enter the path to your input data csv file:  "))
+        with open(input_path, "r") as input_data:
+            input_read = csv.reader(input_data)
+            header = next(input_read)
+            for record in input_read:
+                focallength.append(float(record[0]))
+                elevation.append(float(record[1]))
+                endlap.append(float(record[2]))
+                sidelap.append(float(record[3]))
+                speed.append(float(record[4]))
+                filmformatsizeinput.append(float(record[5]))
+                scaleinput.append(float(record[6]))
+        # Call global csv variable and assign name depending on camera type
+        output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
+        global output_path  
+        output_path = open(output_location + "\\FlightPlan-FilmOutput.csv", "w")
+        with open(output_path, "a") as output_data:
+            headwriter = csv.writer(output_data)
+            headwriter.writerow(["Camera_Type", "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
+            "Film_Format_Size(mm)", "Scale_(1:  )","", "Flying_Height(meters_above_terrain)", "Flying_Height_Above_Sea_Level(m)" "",
+            "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+        # break
+        # print("Please check your input data.")    
+        # userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
+    else:
+        print("Please confirm that you have checked your input data.")
 
 
 
 def Digital_input_loop():  
-    ######## sarah: Add in the specifications how how the csv should be etc. etc. ######
-    ####################################################################################
-    input_path = str(input("Please enter the path to your input data csv file:  "))
-    with open(input_path, "r") as input_data:
-        input_read = csv.reader(input_data)
-        header = next(input_read)
-        for record in input_read:
-            focallength.append(float(record[0]))
-            elevation.append(float(record[1]))
-            endlap.append(float(record[2]))
-            sidelap.append(float(record[3]))
-            speed.append(float(record[4]))
-            acrosstrack.append(float(record[5]))
-            alongtrack.append(float(record[6]))
-            pixelsize.append(float(record[7]))
-            gsd.append(float(record[8]))
-    output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
-    global output_path 
-    output_path = open(output_location + "\\FlightPlan-DigitalOutput.csv", "w")
-    with open(output_path, "a") as output_data:
-        headwriter = csv.writer(output_data)
-        headwriter.writerow(["Camera_Type", "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
-        "Across_Track_Array", "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "", "Flying_Height(meters_above_terrain", 
-        "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+    print()
+    print("Across-Track Array Pixels = Total Pixels (e.g. 20010)")
+    print("Along-track Array Pixels = Total Pixels (e.g. 13080")
+    print("Physical Pixel Size = mm (e.g. 0.0052)")
+    print("")        
+    print("Focal Length = mm (e.g. 152.4)")
+    print("Average Terrain Elevation Above Datum = metres above sea level (e.g. 300)")        print("Endlap  = percantage as decimal (e.g. 0.60)")
+    print("Sidelap = percentage as decimal (e.g. 0.30)")
+    print("Average Ground Speed of Plane = km/hr (e.g. 160)")
+    print()  
+    userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
+    print()
 
+    # Same issue as above. Delete whichever option is less effective
+    # while userready.upper() == "Y":  
+    if userready.upper() == "Y":
+        input_path = str(input("Please enter the path to your input data csv file:  "))
+        with open(input_path, "r") as input_data:
+            input_read = csv.reader(input_data)
+            header = next(input_read)
+            for record in input_read:
+                focallength.append(float(record[0]))
+                elevation.append(float(record[1]))
+                endlap.append(float(record[2]))
+                sidelap.append(float(record[3]))
+                speed.append(float(record[4]))
+                acrosstrack.append(float(record[5]))
+                alongtrack.append(float(record[6]))
+                pixelsize.append(float(record[7]))
+                gsd.append(float(record[8]))
+        output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
+        global output_path 
+        output_path = open(output_location + "\\FlightPlan-DigitalOutput.csv", "w")
+        with open(output_path, "a") as output_data:
+            headwriter = csv.writer(output_data)
+            headwriter.writerow(["Camera_Type", "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
+            "Across_Track_Array", "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "", "Flying_Height(meters_above_terrain", 
+            "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+    # break
+    # print("Please check your input data.")    
+    # userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
+    
+    else:
+        print("Please confirm that you have checked your input data.")
 
 
 def Film_calcandoutput_loop():
@@ -313,6 +346,16 @@ def Digital_calcandouput_loop():
 
 
 def main():
+    #try:
+    
+    # Indent following code once ready to use try:
+    # Display Program Purpose
+    print("This program will aid the designing process of an aerial photography remote sensing mission.") 
+    print("Specifically, this program will calculate the location, direction, and number of flight lines")
+    print("necessary to adequately photograph a given area, as well as the elevation the aircraft should fly at.")
+
+    # Get input for camera type
+    cameratype = input("Will the camera be digital (D) or film (F)?: ")
     if cameratype.upper() == "F":
         Film_input_loop()
         Film_calcandoutput_loop()
@@ -322,7 +365,23 @@ def main():
         Digital_calcandouput_loop()
         output_path.close()
 
-        ## Error handling here ##
+    ## Error handling here ##
+    # We can make these more specific. Just copied from Whale Mapping for now. Commented out so we can test code
+
+    # Add exceptions to try condition for any errors that might occur
+    # Display error as message
+    # except TypeError as message:
+    #     print(" There was an error: ", message)
+    # except NameError as message:
+    #     print(" There was an error: ", message)
+    # except ValueError as message:
+    #     print(" There was an error: ", message)
+    # except SyntaxError as message: 
+    #     print(" There was an error: ", message)
+    # except RuntimeError as message:
+    #     print(" There was an error: ", message)
+    # except Exception as message:
+    #     print(" There was an error: ", message)
 
 if __name__ == "__main__":
     main()
