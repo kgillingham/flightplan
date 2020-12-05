@@ -126,7 +126,7 @@ def Film_input_loop():
         output_path = open(output_location + "\\FlightPlan-FilmOutput.csv", "w")
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
-            headwriter.writerow(["Camera_Type", "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
+            headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
             "Film_Format_Size(mm)", "Scale_(1:  )","", "Flying_Height(meters_above_terrain)", "Flying_Height_Above_Sea_Level(m)" "",
             "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
         # break
@@ -174,7 +174,7 @@ def Digital_input_loop():
         output_path = open(output_location + "\\FlightPlan-DigitalOutput.csv", "w")
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
-            headwriter.writerow(["Camera_Type", "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
+            headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
             "Across_Track_Array", "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "", "Flying_Height(meters_above_terrain", 
             "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
     # break
