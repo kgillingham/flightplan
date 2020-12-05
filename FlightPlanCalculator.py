@@ -100,7 +100,6 @@ def Film_input_loop():
     print("Endlap  = percantage as decimal (e.g. 0.60)")
     print("Sidelap = percentage as decimal (e.g. 0.30)")
     print("Average Ground Speed of Plane = km/hr (e.g. 160)")
-    print("Ground Sampling Distance = m (e.g. 0.25)")    
     print()
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
@@ -143,9 +142,10 @@ def Digital_input_loop():
     print("Across-Track Array Pixels = Total Pixels (e.g. 20010)")
     print("Along-track Array Pixels = Total Pixels (e.g. 13080")
     print("Physical Pixel Size = mm (e.g. 0.0052)")
-    print("")        
+    print("Ground Sampling Distance = m (e.g. 0.25)")       
     print("Focal Length = mm (e.g. 152.4)")
-    print("Average Terrain Elevation Above Datum = metres above sea level (e.g. 300)")        print("Endlap  = percantage as decimal (e.g. 0.60)")
+    print("Average Terrain Elevation Above Datum = metres above sea level (e.g. 300)")        
+    print("Endlap = percantage as decimal (e.g. 0.60)")
     print("Sidelap = percentage as decimal (e.g. 0.30)")
     print("Average Ground Speed of Plane = km/hr (e.g. 160)")
     print()  
@@ -352,8 +352,11 @@ def main():
     # Display Program Purpose
     print("This program will aid the designing process of an aerial photography remote sensing mission.") 
     print("Specifically, this program will calculate the location, direction, and number of flight lines")
-    print("necessary to adequately photograph a given area, as well as the elevation the aircraft should fly at.")
-
+    print("necessary to adequately photograph a given area, as well as the elevation at which the aircraft should fly.")
+    print()
+    print("For the purpose of this calculation, average terrain elevation and flying height of aircraft will not vary")
+    print("over the desired study area.")
+    print()
     # Get input for camera type
     cameratype = input("Will the camera be digital (D) or film (F)?: ")
     if cameratype.upper() == "F":
