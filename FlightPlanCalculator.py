@@ -16,15 +16,15 @@ import csv
 
 ################ Global variable lists to be accessed ##################
 # Non-specific to camera type lists
-focallength = []              # create empty list for focallength
-elevation = []                # create empty list for elevation
-endlap = []                   # create empty list for endlap
-sidelap = []                  # create empty list for sidelap
-speed = []                    # create empty list for speed
+focallength_list = []              # create empty list for focallength
+elevation_list = []                # create empty list for elevation
+endlap_list = []                   # create empty list for endlap
+sidelap_list = []                  # create empty list for sidelap
+speed_list = []                    # create empty list for speed
 # # Lists for Film
-filmformatsizeinput = []      # create empty list for film format size input
+filmformatsizeinput_list = []      # create empty list for film format size input
 # filmformatsize = []         # create empty list for calculated film format size  
-scaleinput = []               # create empty list for scale input
+scaleinput_list = []               # create empty list for scale input
 # scale = []                  # create empty list for calculated scale
 # flyingheight = []           # create empty list for flying height
 # singleimagegc = []          # create empty list for single image ground coverage
@@ -36,10 +36,10 @@ scaleinput = []               # create empty list for scale input
 # flightlines = []            # create empty list for number of flight lines
 # totalphotos = []            # create empty list for total photos
 # # Lists for Digital
-acrosstrack = []              # create empty list for across track ground coverage
-alongtrack = []               # create empty list for along track ground coverage
-pixelsize = []                # create empty list for pixel size 
-gsd = []                      # create empty list for ground sampling distance (?)
+acrosstrack_list = []              # create empty list for across track ground coverage
+alongtrack_list = []               # create empty list for along track ground coverage
+pixelsize_list = []                # create empty list for pixel size 
+gsd_list = []                      # create empty list for ground sampling distance (?)
 # flyingheight = []           # create empty list for flying height
 # heightaboveterrain = []     # create empty list for height above the terrain
 # acrosscoverage = []         # create empty list for across track coverage
@@ -113,13 +113,13 @@ def Film_input_loop():
             input_read = csv.reader(input_data)
             header = next(input_read)
             for record in input_read:
-                focallength.append(float(record[0]))
-                elevation.append(float(record[1]))
-                endlap.append(float(record[2]))
-                sidelap.append(float(record[3]))
-                speed.append(float(record[4]))
-                filmformatsizeinput.append(float(record[5]))
-                scaleinput.append(float(record[6]))
+                focallength_list.append(float(record[0]))
+                elevation_list.append(float(record[1]))
+                endlap_list.append(float(record[2]))
+                sidelap_list.append(float(record[3]))
+                speed_list.append(float(record[4]))
+                filmformatsizeinput_list.append(float(record[5]))
+                scaleinput_list.append(float(record[6]))
         # Call global csv variable and assign name depending on camera type
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path  
@@ -160,15 +160,15 @@ def Digital_input_loop():
             input_read = csv.reader(input_data)
             header = next(input_read)
             for record in input_read:
-                focallength.append(float(record[0]))
-                elevation.append(float(record[1]))
-                endlap.append(float(record[2]))
-                sidelap.append(float(record[3]))
-                speed.append(float(record[4]))
-                acrosstrack.append(float(record[5]))
-                alongtrack.append(float(record[6]))
-                pixelsize.append(float(record[7]))
-                gsd.append(float(record[8]))
+                focallength_list.append(float(record[0]))
+                elevation_list.append(float(record[1]))
+                endlap_list.append(float(record[2]))
+                sidelap_list.append(float(record[3]))
+                speed_list.append(float(record[4]))
+                acrosstrack_list.append(float(record[5]))
+                alongtrack_list.append(float(record[6]))
+                pixelsize_list.append(float(record[7]))
+                gsd_list.append(float(record[8]))
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path 
         output_path = open(output_location + "\\FlightPlan-DigitalOutput.csv", "w")
@@ -187,160 +187,138 @@ def Digital_input_loop():
 
 def Film_calcandoutput_loop():
 
-    coords = [[] for x in range(4)]
+    for index in range(len(focallength_list)):
+        scaleinput = scaleinput_list[index]
+        filmformatsizeinput = filmformatsizeinput_list[index]
+        elevation = elevation_list[index]
+        focallength = focallength_list[index]
+        endlap = endlap_list[index]
+        sidelap = sidelap_list[index]
+        speed = speed_list[index]
 
-    # get 4 lat long pairs from the user, store in list
-    coords[0].append(float(input("Point 1 latitude: ")))
-    coords[0].append(float(input("Point 1 longitude: ")))
-    coords[1].append(float(input("Point 2 latitude: ")))
-    coords[1].append(float(input("Point 2 longitude: ")))
-    coords[2].append(float(input("Point 3 latitude: ")))
-    coords[2].append(float(input("Point 3 longitude: ")))
-    coords[3].append(float(input("Point 4 latitude: ")))
-    coords[3].append(float(input("Point 4 longitude: ")))
+        coords = [[] for x in range(4)]
 
-    # convert degrees to radians, store in list
-    rcoords = [[] for x in range(4)]
-    for x in range(len(coords)):
-        for y in range(len(coords[0])):
-            rcoords[x].append(math.radians(coords[x][y]))
+        # get 4 lat long pairs from the user, store in list
+        coords[0].append(float(input("Point 1 latitude: ")))
+        coords[0].append(float(input("Point 1 longitude: ")))
+        coords[1].append(float(input("Point 2 latitude: ")))
+        coords[1].append(float(input("Point 2 longitude: ")))
+        coords[2].append(float(input("Point 3 latitude: ")))
+        coords[2].append(float(input("Point 3 longitude: ")))
+        coords[3].append(float(input("Point 4 latitude: ")))
+        coords[3].append(float(input("Point 4 longitude: ")))
 
-    # pass radian values to haversine function
-    distance = haversine(rcoords)
+        # convert degrees to radians, store in list
+        rcoords = [[] for x in range(4)]
+        for x in range(len(coords)):
+            for y in range(len(coords[0])):
+                rcoords[x].append(math.radians(coords[x][y]))
 
-    # # Following section by Sarah
-    # # Get user inputs for values non-specific to camera type and store in unique variables
-    # focallength.append(float(input("In millimetres, what is the focal length of the camera? (e.g. 152.4): ")))
-    # print()
-    # print("For the purpose of this calculation, it is assumed that elevation will not vary over the desired study area.")
-    # elevation.append(int(input("In metres above sea level, what is the average terrain elevation above the datum? (e.g. 300): ")))
-    # print()
-    # endlap.append(float(input("As a percent, what is the desired amount of endlap? (e.g. 0.60): ")))
-    # print()
-    # sidelap.append(float(input("As a percent, what is the desired amount of sidelap? (e.g. 0.30): ")))
-    # print()
-    # speed = int(input("In kilometres/hour, what is the average ground speed of the aircraft? (e.g. 160): "))
-    # print()
-    # cameratype = input("Will the camera be digital (D) or film (F)?: ")
-    
-    #Get inputs for film camera specific variahbles
-    # filmformatsizeinput = float(input("In millimetres, what is the film format size? (e.g. 230): "))
-    # filmformatsize = filmformatsizeinput/1000
-    # scaleinput = float(input("What is the desired scale? Please enter the denominator only (e.g. 25000). Scale = 1: "))
-    # scale = 1/scaleinput
+        # pass radian values to haversine function
+        distance = haversine(rcoords)
 
-    #Calcualte film camera specific variables
-    scale = 1/scaleinput
-    filmformatsize = filmformatsizeinput/1000
-    flyingheight = (focallength/scale)+elevation
-    heightaboveterrain = flyingheight - elevation
-    singleimagegc = filmformatsize/scale
-    groundphotosep = (1-endlap)*singleimagegc
-    exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
-    adjustedgroundphotosep = exposuretime*speed*(1000/3600)
-    photosperline = math.ceil((length/adjustedgroundphotosep)+1+1)
-    distancebwlines = (1-sidelap)*singleimagegc
-    flightlines = math.ceil((width/distancebwlines)+1)
-    totalphotos = flightlines*photosperline
+        #Calcualte film camera specific variables
+        scale = 1/scaleinput
+        filmformatsize = filmformatsizeinput/1000
+        flyingheight = (focallength/scale)+elevation
+        heightaboveterrain = flyingheight - elevation
+        singleimagegc = filmformatsize/scale
+        groundphotosep = (1-endlap)*singleimagegc
+        exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
+        adjustedgroundphotosep = exposuretime*speed*(1000/3600)
+        photosperline = math.ceil((length/adjustedgroundphotosep)+1+1)
+        distancebwlines = (1-sidelap)*singleimagegc
+        flightlines = math.ceil((width/distancebwlines)+1)
+        totalphotos = flightlines*photosperline
 
-    #display final outputs for film camera
-    print("Flying Height: ")
-    print("With a camera focal length of ", focallength, " millimetres and a desired scale of 1:", scaleinput, 
-    " at an average terrain elevation of ", elevation, " metres above sea level, flying height above terrain is ", heightaboveterrain, ". /n")
-    print("Minimum Flight Lines: ")
-    print("With a film format size of ", filmformatsizeinput, " millimetres and scale of 1:", scaleinput, 
-    ", the ground cover of a single image is ", singleimagegc, "metres on a side")
-    print("With a desired sidelap of ", (sidelap*100), "%, there should be ", distancebwlines, " metres between flight lines.")
-    print("With the study area wdith of ", width, " metres, the minimum number of flight lines is ", flightlines, ". /n")
-    print("Minimum Numbers of Photographs: ")
-    print("With a desired endlap of ", (endlap*100), "%, ground photo seperation is ", groundphotosep, " metres.")
-    print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
-    print("With an adjusted distance of ", adjustedgroundphotosep, " metres between photographs, the minimum number of photos per line is ", 
-    photosperline, ". /n")
-    print("The total number of photographs taken will be ", totalphotos, ".")
+        #display final outputs for film camera
+        print("Flying Height: ")
+        print("With a camera focal length of ", focallength, " millimetres and a desired scale of 1:", scaleinput, 
+        " at an average terrain elevation of ", elevation, " metres above sea level, flying height above terrain is ", heightaboveterrain, ". /n")
+        print("Minimum Flight Lines: ")
+        print("With a film format size of ", filmformatsizeinput, " millimetres and scale of 1:", scaleinput, 
+        ", the ground cover of a single image is ", singleimagegc, "metres on a side")
+        print("With a desired sidelap of ", (sidelap*100), "%, there should be ", distancebwlines, " metres between flight lines.")
+        print("With the study area wdith of ", width, " metres, the minimum number of flight lines is ", flightlines, ". /n")
+        print("Minimum Numbers of Photographs: ")
+        print("With a desired endlap of ", (endlap*100), "%, ground photo seperation is ", groundphotosep, " metres.")
+        print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
+        print("With an adjusted distance of ", adjustedgroundphotosep, " metres between photographs, the minimum number of photos per line is ", 
+        photosperline, ". /n")
+        print("The total number of photographs taken will be ", totalphotos, ".")
 
-    # Create and
-    with open(output_path, "a") as output_data:
-        writer = csv.writer(output_data)
-        writer.writerow([cameratype, focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, "", heightaboveterrain, flyingheight, 
-        "", flightlines, distancebwlines, "", totalphotos, photosperline])    
+        # Create and
+        with open(output_path, "a") as output_data:
+            writer = csv.writer(output_data)
+            writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, "", heightaboveterrain, flyingheight, 
+            "", flightlines, distancebwlines, "", totalphotos, photosperline])    
 
 
 def Digital_calcandouput_loop():
 
-    coords = [[] for x in range(4)]
+    for index in range(len(focallength_list)):
+        focallength = focallength_list[index]
+        elevation = elevation_list[index]
+        endlap = endlap_list[index]
+        sidelap = sidelap_list[index]
+        speed = speed_list[index]
+        acrosstrack = acrosstrack_list[index]
+        alongtrack = alongtrack_list[index]
+        pixelsize = pixelsize_list[index]
+        gsd = gsd_list[index]
 
-    # get 4 lat long pairs from the user, store in list
-    coords[0].append(float(input("Point 1 latitude: ")))
-    coords[0].append(float(input("Point 1 longitude: ")))
-    coords[1].append(float(input("Point 2 latitude: ")))
-    coords[1].append(float(input("Point 2 longitude: ")))
-    coords[2].append(float(input("Point 3 latitude: ")))
-    coords[2].append(float(input("Point 3 longitude: ")))
-    coords[3].append(float(input("Point 4 latitude: ")))
-    coords[3].append(float(input("Point 4 longitude: ")))
+        coords = [[] for x in range(4)]
 
-    # convert degrees to radians, store in list
-    rcoords = [[] for x in range(4)]
-    for x in range(len(coords)):
-        for y in range(len(coords[0])):
-            rcoords[x].append(math.radians(coords[x][y]))
+        # get 4 lat long pairs from the user, store in list
+        coords[0].append(float(input("Point 1 latitude: ")))
+        coords[0].append(float(input("Point 1 longitude: ")))
+        coords[1].append(float(input("Point 2 latitude: ")))
+        coords[1].append(float(input("Point 2 longitude: ")))
+        coords[2].append(float(input("Point 3 latitude: ")))
+        coords[2].append(float(input("Point 3 longitude: ")))
+        coords[3].append(float(input("Point 4 latitude: ")))
+        coords[3].append(float(input("Point 4 longitude: ")))
 
-    # pass radian values to haversine function
-    distance = haversine(rcoords)
+        # convert degrees to radians, store in list
+        rcoords = [[] for x in range(4)]
+        for x in range(len(coords)):
+            for y in range(len(coords[0])):
+                rcoords[x].append(math.radians(coords[x][y]))
 
-    # # Following section by Sarah
-    # # Get user inputs for values non-specific to camera type and store in unique variables
-    # focallength.append(float(input("In millimetres, what is the focal length of the camera? (e.g. 152.4): ")))
-    # print()
-    # print("For the purpose of this calculation, it is assumed that elevation will not vary over the desired study area.")
-    # elevation.append(int(input("In metres above sea level, what is the average terrain elevation above the datum? (e.g. 300): ")))
-    # print()
-    # endlap.append(float(input("As a percent, what is the desired amount of endlap? (e.g. 0.60): ")))
-    # print()
-    # sidelap.append(float(input("As a percent, what is the desired amount of sidelap? (e.g. 0.30): ")))
-    # print()
-    # speed = int(input("In kilometres/hour, what is the average ground speed of the aircraft? (e.g. 160): "))
-    # print()
-    # cameratype = input("Will the camera be digital (D) or film (F)?: ")
+        # pass radian values to haversine function
+        distance = haversine(rcoords)
 
-    # #Get inputs for digital camera specific variables
-    # acrosstrack = float(input("What is the number of pixels in the across-track sensor array? (e.g. 20010): "))
-    # alongtrack = float(input("What is the number of pixels in the along-track sensor array? (e.g. 13080): "))
-    # pixelsize = float(input("In millimetres, whaty is the physical size of each pixel? (e.g. 0.0052): "))
-    # gsd =  float(input("In metres, what is the ground smapling distance? (e.g. 0.25): ")
+        #Calcualte digital camera specific variables
+        flyingheight = ((gsd*focallength)/pixelsize)+elevation
+        heightaboveterrain = flyingheight-elevation 
+        acrosscoverage = ((acrosstrack*pixelsize)*heightaboveterrain)/focallength
+        alongcoverage = ((alongtrack*pixelsize)*heightaboveterrain)/focallength
+        groundphotosep = (1-endlap)*alongcoverage
+        exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
+        photosperline = math.ceil((length/groundphotosep)+1+1)
+        distancebwlines = (1-sidelap)*acrosscoverage
+        flightlines = math.ceil((width/distancebwlines)+1)
+        totalphotos = flightlines*photosperline
+        #Display final outputs for digital camera
+        print("Flying Height: ")
+        print("With a focal length of ", focallength, " millimetres, a pixel size of ", pixelsize, 
+        " millimetres, a ground sampling distance of ", gsd, " metres, and at an average terrain elevation of ", elevation, 
+        " metres above sea level, flying height above terrain is ", heightaboveterrain, " metres. /n")
+        print("Minimum Flight Lines: ")
+        print("Across track ground coverage distance with ", acrosstrack, " pixels is ", acrosscoverage, " metres.")
+        print("With a desired sidelap of ", sidelap, "%, there should be ", distancebwlines, " metres between flight lines.")
+        print("With a study area width of ", width, " metres, the minimum number of flight lines is ", flightlines, ". /n")
+        print("Minimum Number of Photographs: ")
+        print("Along track ground coverage distance with ", alongtrack, " pixels is ", alongcoverage, " metres.")
+        print("With a desired endlap of ", endlap, " %, ground photo seperation is ", groundphotosep, " metres.")
+        print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
+        print("With a distance of ", groundphotosep, " metres between photographs, the minimum number of photos per line is ", photosperline, ". /n")
+        print("The total number of photographs taken will be ", totalphotos, ".")
 
-    #Calcualte digital camera specific variables
-    flyingheight = ((gsd*focallength)/pixelsize)+elevation
-    heightaboveterrain = flyingheight-elevation 
-    acrosscoverage = ((acrosstrack*pixelsize)*heightaboveterrain)/focallength
-    alongcoverage = ((alongtrack*pixelsize)*heightaboveterrain)/focallength
-    groundphotosep = (1-endlap)*alongcoverage
-    exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
-    photosperline = math.ceil((length/groundphotosep)+1+1)
-    distancebwlines = (1-sidelap)*acrosscoverage
-    flightlines = math.ceil((width/distancebwlines)+1)
-    totalphotos = flightlines*photosperline
-    #Display final outputs for digital camera
-    print("Flying Height: ")
-    print("With a focal length of ", focallength, " millimetres, a pixel size of ", pixelsize, 
-    " millimetres, a ground sampling distance of ", gsd, " metres, and at an average terrain elevation of ", elevation, 
-    " metres above sea level, flying height above terrain is ", heightaboveterrain, " metres. /n")
-    print("Minimum Flight Lines: ")
-    print("Across track ground coverage distance with ", acrosstrack, " pixels is ", acrosscoverage, " metres.")
-    print("With a desired sidelap of ", sidelap, "%, there should be ", distancebwlines, " metres between flight lines.")
-    print("With a study area width of ", width, " metres, the minimum number of flight lines is ", flightlines, ". /n")
-    print("Minimum Number of Photographs: ")
-    print("Along track ground coverage distance with ", alongtrack, " pixels is ", alongcoverage, " metres.")
-    print("With a desired endlap of ", endlap, " %, ground photo seperation is ", groundphotosep, " metres.")
-    print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
-    print("With a distance of ", groundphotosep, " metres between photographs, the minimum number of photos per line is ", photosperline, ". /n")
-    print("The total number of photographs taken will be ", totalphotos, ".")
-
-    with open(output_path, "a") as output_data:
-        writer = csv.writer(output_data)
-        writer.writerow([cameratype, focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, "", heightaboveterrain, 
-        flyingheight, "", flightlines, distancebwlines, "", totalphotos, photosperline])
+        with open(output_path, "a") as output_data:
+            writer = csv.writer(output_data)
+            writer.writerow([focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, "", heightaboveterrain, 
+            flyingheight, "", flightlines, distancebwlines, "", totalphotos, photosperline])
 
     
 
