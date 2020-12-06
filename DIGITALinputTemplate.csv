@@ -1,0 +1,2 @@
+﻿Focal_Length(mm),Elevation_(meters_ASL),Endlap_(%),Sidelap_(%),Aircraft_Speed(Km/h),Across_Track_Array,Along_Track_Array,Pixel_Size(mm),Ground_Sampling_Distance(m),Coordinate1_Latitude,Coordinate1_Longtidude,Coordinate2_Latitude,Coordinate2_Longtidude,Coordinate3_Latitude,Coordinate3_Longtitude,Coordinate4_Latitude,Coordinate4_Longtitude
+80,300,0.6,0.3,260,20010,13080,0.0052,0.025,45.5236,75.6009,45.3236,75.6009,45.3236,75.7509,45.5236,75.7509
