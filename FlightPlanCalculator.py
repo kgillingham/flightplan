@@ -481,7 +481,7 @@ def Digital_calcandouput_loop():
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, coordinate1[0], coordinate1[1], 
-                coordinate2[0], coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1],"", heightaboveterrain, flyingheight, 
+                coordinate2[0], coordinate2[1], coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1],"", heightaboveterrain, flyingheight, 
                 "", flightlines, distancebwlines, "", totalphotos, photosperline])
 
     
