@@ -119,8 +119,9 @@ def Film_input_loop():
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
-            "Film_Format_Size(mm)", "Scale_(1:  )","", "Flying_Height(meters_above_terrain)", "Flying_Height_Above_Sea_Level(m)" "",
-            "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+            "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", "Coordinate2_Longitude",
+            "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "", "Flying_Height(meters_above_terrain)",
+             "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
         # break
         # print("Please check your input data.")    
         # userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
@@ -161,14 +162,25 @@ def Digital_input_loop():
                 alongtrack_list.append(float(record[6]))
                 pixelsize_list.append(float(record[7]))
                 gsd_list.append(float(record[8]))
+                coords_list[0].append(float(record[7]))
+                coords_list[0].append(float(record[8]))
+                coords_list[1].append(float(record[9]))
+                coords_list[1].append(float(record[10]))
+                coords_list[2].append(float(record[11]))
+                coords_list[2].append(float(record[12]))
+                coords_list[3].append(float(record[13]))
+                coords_list[3].append(float(record[14]))
+
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path 
         output_path = open(output_location + "\\FlightPlan-DigitalOutput.csv", "w")
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
-            headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
-            "Across_Track_Array", "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "", "Flying_Height(meters_above_terrain", 
-            "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+            headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", "Across_Track_Array", 
+            "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "Coordinate1_Latitude","Coordinate1_Longtitude","Coordinate2_Latitude",
+             "Coordinate2_Longitude","Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude","", 
+             "Flying_Height(meters_above_terrain", "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)",
+              "", "Total_Photos", "Photos_Per_Line"])
     # break
     # print("Please check your input data.")    
     # userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
@@ -263,6 +275,10 @@ def Film_calcandoutput_loop():
             endlap = endlap_list[index]
             sidelap = sidelap_list[index]
             speed = speed_list[index]
+            coordinate1 = coords_list[0][0], coords_list[0][1]
+            coordinate2 = coords_list[1][0], coords_list[1][1]
+            coordinate3 = coords_list[2][0], coords_list[2][1]
+            coordinate4 = coords_list[3][0], coords_list[3][1]
 
             # convert degrees to radians, store in list
             rcoords = [[] for x in range(4)]
@@ -308,8 +324,9 @@ def Film_calcandoutput_loop():
             # Create and
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
-                writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, "", heightaboveterrain, flyingheight, 
-                "", flightlines, distancebwlines, "", totalphotos, photosperline])    
+                writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, coordinate1[0], coordinate1[1], coordinate2[0], 
+                coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1], "", heightaboveterrain, flyingheight, "", flightlines, 
+                distancebwlines, "", totalphotos, photosperline])    
 
 
 def Digital_calcandouput_loop():
@@ -418,6 +435,11 @@ def Digital_calcandouput_loop():
             alongtrack = alongtrack_list[index]
             pixelsize = pixelsize_list[index]
             gsd = gsd_list[index]
+            coordinate1 = coords_list[0][0], coords_list[0][1]
+            coordinate2 = coords_list[1][0], coords_list[1][1]
+            coordinate3 = coords_list[2][0], coords_list[2][1]
+            coordinate4 = coords_list[3][0], coords_list[3][1]
+
 
             # convert degrees to radians, store in list
             rcoords = [[] for x in range(4)]
@@ -458,8 +480,9 @@ def Digital_calcandouput_loop():
 
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
-                writer.writerow([focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, "", heightaboveterrain, 
-                flyingheight, "", flightlines, distancebwlines, "", totalphotos, photosperline])
+                writer.writerow([focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, coordinate1[0], coordinate1[1], 
+                coordinate2[0], coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1],"", heightaboveterrain, flyingheight, 
+                "", flightlines, distancebwlines, "", totalphotos, photosperline])
 
     
 
