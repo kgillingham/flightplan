@@ -21,35 +21,16 @@ elevation_list = []                # create empty list for elevation
 endlap_list = []                   # create empty list for endlap
 sidelap_list = []                  # create empty list for sidelap
 speed_list = []                    # create empty list for speed
-# # Lists for Film
+coords_list = [[] for x in range(4)]                        # create empty list to store pairs of coordinates
+
+# Lists for Film
 filmformatsizeinput_list = []      # create empty list for film format size input
-# filmformatsize = []         # create empty list for calculated film format size  
 scaleinput_list = []               # create empty list for scale input
-# scale = []                  # create empty list for calculated scale
-# flyingheight = []           # create empty list for flying height
-# singleimagegc = []          # create empty list for single image ground coverage
-# groundphotosep = []         # create empty list for ground photo separation
-# exposuretime = []           # create empty list for exposure time
-# adjustedgroundphotosep = [] # create empty list for adjusted ground photo separation
-# photosperline = []          # create empty list for number of photos per line
-# distancebwlines = []        # create empty list for distance between lines
-# flightlines = []            # create empty list for number of flight lines
-# totalphotos = []            # create empty list for total photos
-# # Lists for Digital
+# Lists for Digital
 acrosstrack_list = []              # create empty list for across track ground coverage
 alongtrack_list = []               # create empty list for along track ground coverage
 pixelsize_list = []                # create empty list for pixel size 
 gsd_list = []                      # create empty list for ground sampling distance (?)
-# flyingheight = []           # create empty list for flying height
-# heightaboveterrain = []     # create empty list for height above the terrain
-# acrosscoverage = []         # create empty list for across track coverage
-# alongcoverage = []          # create empty list for along track coverage
-# groundphotosep = []         # create empty list for ground photo separation
-# exposuretime = []           # create empty list for exposure time
-# photosperline = []          # create empty list for number of photos per line
-# distancebwlines = []        # create empty list for distance between lines
-# flightlines = []            # create empty list for number of light lines
-# totalphotos = []            # create empty list for total photos
 
 # Define global variables 
 radius = 6.3781e6
@@ -100,6 +81,8 @@ def Film_input_loop():
     print("Endlap  = percantage as decimal (e.g. 0.60)")
     print("Sidelap = percentage as decimal (e.g. 0.30)")
     print("Average Ground Speed of Plane = km/hr (e.g. 160)")
+    print("The latitude and longitude of the 4 coordinates of the corner of the study area, starting with coordinate 1 latitude")
+    print("You may also use the provided input csv template.")
     print()
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
@@ -120,6 +103,14 @@ def Film_input_loop():
                 speed_list.append(float(record[4]))
                 filmformatsizeinput_list.append(float(record[5]))
                 scaleinput_list.append(float(record[6]))
+                coords_list[0].append(float(record[7]))
+                coords_list[0].append(float(record[8]))
+                coords_list[1].append(float(record[9]))
+                coords_list[1].append(float(record[10]))
+                coords_list[2].append(float(record[11]))
+                coords_list[2].append(float(record[12]))
+                coords_list[3].append(float(record[13]))
+                coords_list[3].append(float(record[14]))
         # Call global csv variable and assign name depending on camera type
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path  
@@ -196,26 +187,17 @@ def Film_calcandoutput_loop():
         sidelap = sidelap_list[index]
         speed = speed_list[index]
 
-        coords = [[] for x in range(4)]
-
-        # get 4 lat long pairs from the user, store in list
-        coords[0].append(float(input("Point 1 latitude: ")))
-        coords[0].append(float(input("Point 1 longitude: ")))
-        coords[1].append(float(input("Point 2 latitude: ")))
-        coords[1].append(float(input("Point 2 longitude: ")))
-        coords[2].append(float(input("Point 3 latitude: ")))
-        coords[2].append(float(input("Point 3 longitude: ")))
-        coords[3].append(float(input("Point 4 latitude: ")))
-        coords[3].append(float(input("Point 4 longitude: ")))
-
         # convert degrees to radians, store in list
         rcoords = [[] for x in range(4)]
-        for x in range(len(coords)):
-            for y in range(len(coords[0])):
-                rcoords[x].append(math.radians(coords[x][y]))
+        
+        for x in range(len(coords_list)):
+            for y in range(len(coords_list[x])):
+                rcoords[x].append(math.radians(coords_list[x][y]))
 
         # pass radian values to haversine function
         distance = haversine(rcoords)
+        length = distance[0]
+        width = distance[1]
 
         #Calcualte film camera specific variables
         scale = 1/scaleinput
@@ -267,26 +249,17 @@ def Digital_calcandouput_loop():
         pixelsize = pixelsize_list[index]
         gsd = gsd_list[index]
 
-        coords = [[] for x in range(4)]
-
-        # get 4 lat long pairs from the user, store in list
-        coords[0].append(float(input("Point 1 latitude: ")))
-        coords[0].append(float(input("Point 1 longitude: ")))
-        coords[1].append(float(input("Point 2 latitude: ")))
-        coords[1].append(float(input("Point 2 longitude: ")))
-        coords[2].append(float(input("Point 3 latitude: ")))
-        coords[2].append(float(input("Point 3 longitude: ")))
-        coords[3].append(float(input("Point 4 latitude: ")))
-        coords[3].append(float(input("Point 4 longitude: ")))
-
         # convert degrees to radians, store in list
         rcoords = [[] for x in range(4)]
-        for x in range(len(coords)):
-            for y in range(len(coords[0])):
-                rcoords[x].append(math.radians(coords[x][y]))
+
+        for x in range(len(coords_list)):
+            for y in range(len(coords_list[x])):
+                rcoords[x].append(math.radians(coords_list[x][y]))
 
         # pass radian values to haversine function
         distance = haversine(rcoords)
+        length = distance[0]
+        width = distance[1]
 
         #Calcualte digital camera specific variables
         flyingheight = ((gsd*focallength)/pixelsize)+elevation
