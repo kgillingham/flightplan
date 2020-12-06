@@ -188,7 +188,6 @@ def Digital_input_loop():
     else:
         print("Please confirm that you have checked your input data.")
 
-    # data validation for digital inputs
 
 
 def Film_calcandoutput_loop():
@@ -241,7 +240,20 @@ def Film_calcandoutput_loop():
     for item in scaleinput_list:
         if item < scaleLow or item > scaleHigh:
             scaleCheck = False
-            break            
+            break         
+    # Check latitudes
+    latLow, latHigh = -90, 90
+    latCheck = True
+    if coords_list[0][0] < latLow or coords_list[0][0] > latHigh or coords_list[1][0] < latLow or coords_list[1][0] > latHigh 
+    or coords_list[2][0] < latLow or coords_list[2][0] > latHigh or coords_list[3][0] < latLow or coords_list[3][0] > latHigh:
+        latCheck = False
+    # Check latitudes
+    longLow, longHigh = -180, 180
+    longCheck = True
+    if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh 
+    or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
+        longCheck = False   
+
     # Indentify False checks and print message to user 
     #### (if this doesnt work, it could be if focal = false, else: if eleveation = false, etc) Please let me know what you think
     if focalCheck == False :
@@ -264,6 +276,12 @@ def Film_calcandoutput_loop():
         print("Please check your data inputs.")
     elif scaleCheck == False :
         print("Scale must be greater than 99 and less than 1000001.")
+        print("Please check your data inputs.")
+    elif latCheck == False:
+        print("Latitudes must be greater than -91 degrees and less than 91 degrees.")
+        print("Please check your data inputs.")
+    elif longCheck == False:
+        print("Longitudes must be greater than -181 degrees and less than 181 degrees.")
         print("Please check your data inputs.")
     # Proceed with calculations having validated the input data
     else:
@@ -393,7 +411,19 @@ def Digital_calcandouput_loop():
     for item in gsd_list:
         if item < gsdLow or item > gsdHigh:
             gsdCheck = False
-            break                   
+            break  
+    # Check latitudes
+    latLow, latHigh = -90, 90
+    latCheck = True
+    if coords_list[0][0] < latLow or coords_list[0][0] > latHigh or coords_list[1][0] < latLow or coords_list[1][0] > latHigh 
+    or coords_list[2][0] < latLow or coords_list[2][0] > latHigh or coords_list[3][0] < latLow or coords_list[3][0] > latHigh:
+        latCheck = False
+    # Check latitudes
+    longLow, longHigh = -180, 180
+    longCheck = True
+    if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh 
+    or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
+        longCheck = False                   
     # Indentify False checks and print message to user 
     ### (if this doesnt work, it could be if focal = false, else: if eleveation = false, etc) Please let me know what you think
     if focalCheck == False :
@@ -422,6 +452,12 @@ def Digital_calcandouput_loop():
         print("Please check your data inputs.")
     elif gsdCheck == False :
         print("Ground Sampling Distance must be greater than 0cm and less than 2601cm.")
+        print("Please check your data inputs.")
+    elif latCheck == False:
+        print("Latitudes must be greater than -91 degrees and less than 91 degrees.")
+        print("Please check your data inputs.")
+    elif longCheck == False:
+        print("Longitudes must be greater than -181 degrees and less than 181 degrees.")
         print("Please check your data inputs.")
     # Proceed with calculations having validated the input data
     else:
