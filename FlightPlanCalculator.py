@@ -133,11 +133,7 @@ def Film_input_loop():
     print()
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
-    # Thinking is hard today. Would while and break work for our loop instead of if/else? 
-    # I can't think of how to get it to loop back up to get inputs while doing something with while
-    # So long as the break stops it from doing it more than once?? I don't really remember how breaks work haha
 
-    # while userready.upper() == "Y":
     if userready.upper() == "Y":
         input_path = str(input("Please enter the path to your input data csv file:  "))
         with open(input_path, "r") as input_data:
@@ -169,9 +165,6 @@ def Film_input_loop():
             "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", "Coordinate2_Longitude",
             "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "", "Flying_Height(meters_above_terrain)",
              "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
-        # break
-        # print("Please check your input data.")    
-        # userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -194,8 +187,6 @@ def Digital_input_loop():
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
 
-    # Same issue as above. Delete whichever option is less effective
-    # while userready.upper() == "Y":  
     if userready.upper() == "Y":
         input_path = str(input("Please enter the path to your input data csv file:  "))
         with open(input_path, "r") as input_data:
@@ -230,10 +221,6 @@ def Digital_input_loop():
              "Coordinate2_Longitude","Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude","", 
              "Flying_Height(meters_above_terrain", "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)",
               "", "Total_Photos", "Photos_Per_Line"])
-    # break
-    # print("Please check your input data.")    
-    # userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
-    
     else:
         print("Please confirm that you have checked your input data.")
 
