@@ -188,6 +188,8 @@ def Digital_input_loop():
     print("Along-track Array Pixels = Total Pixels (e.g. 13080")
     print("Physical Pixel Size = mm (e.g. 0.0052)")
     print("Ground Sampling Distance = m (e.g. 0.25)") 
+    print("The latitude and longitude of the 4 coordinates of the corner of the study area, starting with coordinate 1 latitude")
+    print("You may also use the provided input csv template.")
     print()  
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
@@ -291,14 +293,14 @@ def Film_calcandoutput_loop():
     # Check latitudes
     latLow, latHigh = -90, 90
     latCheck = True
-    if coords_list[0][0] < latLow or coords_list[0][0] > latHigh or coords_list[1][0] < latLow or coords_list[1][0] > latHigh 
-    or coords_list[2][0] < latLow or coords_list[2][0] > latHigh or coords_list[3][0] < latLow or coords_list[3][0] > latHigh:
+    if coords_list[0][0] < latLow or coords_list[0][0] > latHigh or coords_list[1][0] < latLow or coords_list[1][0] > latHigh \
+        or coords_list[2][0] < latLow or coords_list[2][0] > latHigh or coords_list[3][0] < latLow or coords_list[3][0] > latHigh:
         latCheck = False
     # Check latitudes
     longLow, longHigh = -180, 180
     longCheck = True
-    if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh 
-    or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
+    if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh \
+        or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
         longCheck = False   
 
     # Indentify False checks and print message to user 
@@ -462,13 +464,13 @@ def Digital_calcandouput_loop():
     # Check latitudes
     latLow, latHigh = -90, 90
     latCheck = True
-    if coords_list[0][0] < latLow or coords_list[0][0] > latHigh or coords_list[1][0] < latLow or coords_list[1][0] > latHigh 
+    if coords_list[0][0] < latLow or coords_list[0][0] > latHigh or coords_list[1][0] < latLow or coords_list[1][0] > latHigh \
     or coords_list[2][0] < latLow or coords_list[2][0] > latHigh or coords_list[3][0] < latLow or coords_list[3][0] > latHigh:
         latCheck = False
     # Check latitudes
     longLow, longHigh = -180, 180
     longCheck = True
-    if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh 
+    if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh \
     or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
         longCheck = False                   
     # Indentify False checks and print message to user 
