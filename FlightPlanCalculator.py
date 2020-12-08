@@ -231,14 +231,14 @@ def Digital_input_loop():
                 alongtrack_list.append(float(record[6]))
                 pixelsize_list.append(float(record[7]))
                 gsd_list.append(float(record[8]))
-                coords_list[0].append(float(record[7]))
-                coords_list[0].append(float(record[8]))
-                coords_list[1].append(float(record[9]))
-                coords_list[1].append(float(record[10]))
-                coords_list[2].append(float(record[11]))
-                coords_list[2].append(float(record[12]))
-                coords_list[3].append(float(record[13]))
-                coords_list[3].append(float(record[14]))
+                coords_list[0].append(float(record[9]))
+                coords_list[0].append(float(record[10]))
+                coords_list[1].append(float(record[11]))
+                coords_list[1].append(float(record[12]))
+                coords_list[2].append(float(record[13]))
+                coords_list[2].append(float(record[14]))
+                coords_list[3].append(float(record[15]))
+                coords_list[3].append(float(record[16]))
 
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path 
@@ -561,8 +561,8 @@ def Digital_calcandouput_loop():
             #Calcualte digital camera specific variables
             flyingheight = ((gsd*focallength)/pixelsize)+elevation
             heightaboveterrain = flyingheight-elevation 
-            acrosscoverage = ((acrosstrack*pixelsize)*heightaboveterrain)/focallength
-            alongcoverage = ((alongtrack*pixelsize)*heightaboveterrain)/focallength
+            acrosscoverage = (((acrosstrack*pixelsize)*heightaboveterrain)/focallength)
+            alongcoverage = (((alongtrack*pixelsize)*heightaboveterrain)/focallength)
             groundphotosep = (1-endlap)*alongcoverage
             exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
             photosperline = math.ceil((length/groundphotosep)+1+1)
