@@ -176,7 +176,7 @@ def Film_input_loop():
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
             "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", "Coordinate2_Longitude",
             "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "", "Flying_Height(meters_above_terrain)",
-             "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line"])
+             "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line", "", "Line_Starting_Coordinates"])
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -232,7 +232,7 @@ def Digital_input_loop():
             "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "Coordinate1_Latitude","Coordinate1_Longtitude","Coordinate2_Latitude",
              "Coordinate2_Longitude","Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude","", 
              "Flying_Height(meters_above_terrain", "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)",
-              "", "Total_Photos", "Photos_Per_Line"])
+              "", "Total_Photos", "Photos_Per_Line",  "", "Line_Starting_Coordinates"])
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -356,6 +356,9 @@ def Film_calcandoutput_loop():
             distance = haversine(rcoords)
             length = distance[0]
             width = distance[1]
+            longbearing = distance[2]
+            shortbearing = distance[3]
+            oneToTwo = distance[4]
 
             #Calcualte film camera specific variables
             scale = 1/scaleinput
@@ -370,6 +373,9 @@ def Film_calcandoutput_loop():
             distancebwlines = (1-sidelap)*singleimagegc
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
+
+            linestartcoords = startingCoords(coords_list[index], longbearing, flightlines)
+
 
             #display final outputs for film camera
             print("Flying Height: ")
@@ -535,6 +541,8 @@ def Digital_calcandouput_loop():
             distance = haversine(rcoords)
             length = distance[0]
             width = distance[1]
+            longbearing = distance[2]
+
             #Calcualte digital camera specific variables
             flyingheight = ((gsd*focallength)/pixelsize)+elevation
             heightaboveterrain = flyingheight-elevation 
@@ -546,6 +554,9 @@ def Digital_calcandouput_loop():
             distancebwlines = (1-sidelap)*acrosscoverage
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
+
+            linestartcoords = startingCoords(coords_list[index], longbearing, flightlines)
+
             #Display final outputs for digital camera
             print("Flying Height: ")
             print("With a focal length of ", focallength, " millimetres, a pixel size of ", pixelsize, 
