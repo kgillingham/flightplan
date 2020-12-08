@@ -103,7 +103,13 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
         startingCoordinates.append(destination)
         start = destination
 
-    return(startingCoordinates)
+    degCoords = [[] for x in range(numFlightLines)]
+    for x in range(len(startingCoordinates)):
+        for y in range(len(startingCoordinates[x])):
+            degCoords[x].append(math.degrees(startingCoordinates[x][y]))
+
+    print(degCoords)
+    return(degCoords)
 
 
 
@@ -115,8 +121,6 @@ def main():
     for x in range(len(coords)):
         for y in range(len(coords[x])):
             rcoords[x].append(math.radians(coords[x][y]))
-
-    print(rcoords)
 
     hav = haversine(rcoords)
 

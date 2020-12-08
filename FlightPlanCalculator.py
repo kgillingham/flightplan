@@ -135,10 +135,13 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
         startingCoordinates.append(destination)
         start = destination
 
-    return(startingCoordinates)
+    degCoords = [[] for x in range(numFlightLines)]
+    for x in range(len(startingCoordinates)):
+        for y in range(len(startingCoordinates[x])):
+            degCoords[x].append(math.degrees(startingCoordinates[x][y]))
+
+    return(degCoords)
     
-
-
 
 
 # Input loop if cameratype is Film
@@ -611,11 +614,9 @@ def main():
     if cameratype.upper() == "F":
         Film_input_loop()
         Film_calcandoutput_loop()
-        output_path.close()
     elif cameratype.upper() == "D":
         Digital_input_loop()
         Digital_calcandouput_loop()
-        output_path.close()
 
     ## Error handling here ##
     # We can make these more specific. Just copied from Whale Mapping for now. Commented out so we can test code
