@@ -56,14 +56,21 @@ def destinationPoint(startingPoint, direction, angularDistance):
 # Pass it the list of coordinates, the bearing of the long side of the rectangle, and the number of flight lines required
 def startingCoords(initCoords, lineDistance, numFlightLines):
 
-    # angular distance
-    angularDist = lineDistance / radius
-
     # get the bearing of the short side of the rectangle from the haversine function
     haversineResult = haversine(initCoords)
     
-    # the bearing of the short side is stored in index 4 of haversineResult
-    bearing = haversineResult[3]
+    # the bearing of the long (index 2) and short (index 3) sides are stored in separate variables
+    bearingLong = haversineResult[2]
+    bearingShort = haversineResult[3]
+
+    # this variable stores the opposite bearing of bearingLong, i.e. 180 degrees apart
+    bearingLongOpposite = (bearingLong + math.pi) % (2 * math.pi)
+
+    # angular distance between flight lines
+    angularDistShort = lineDistance / radius
+
+    # angular distance of the long side of the rectangle
+    angularDistLong = haversineResult[0] / radius
 
     # if oneToTwo (index 4 of haversineResult) is true, then measure distance starting at point 2 towards point 3. If it is false, then use points 1 to 2.
     if haversineResult[4]:
@@ -74,8 +81,25 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
     # declare list that will store the list of starting coordinates. The number of starting coordinates that will need to be calculated is the number of flight lines - 1
     startingCoordinates = []
     startingCoordinates.append(start)
+
+    
+    # This whole chunk of code is hard to explain without a diagram but I will try. 
+    # Adjacent flight lines must start at opposite ends of the rectangle, as that will be the direction that the plane will be coming from after flying across it in one direction.
+    # In order to calculate the starting coordinates of the next flight line, first an intermediate point must be calculated which is on the opposite side of the rectangle, 
+    # on a line parallel to the long side of the rectangle from the previous point. From here, the actual next starting point can be calculated.
+    # If the iterator x is an even number then the opposite of the long bearing must be used.
     for x in range(numFlightLines - 1):
-        destination = destinationPoint(start, bearing, angularDist)
+        # if x == 0:
+        #     destination = destinationPoint(start, bearingShort, angularDistShort)
+        #     start = destination
+
+        if x % 2 != 0:
+            intermediatePoint = destinationPoint(start, bearingLong, angularDistLong)
+        else:
+            intermediatePoint = destinationPoint(start, bearingLongOpposite, angularDistLong)
+
+        destination = destinationPoint(intermediatePoint, bearingShort, angularDistShort)
+
         startingCoordinates.append(destination)
         start = destination
 
