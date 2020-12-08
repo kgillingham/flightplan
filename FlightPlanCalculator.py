@@ -184,7 +184,7 @@ def Film_input_loop():
         # Call global csv variable and assign name depending on camera type
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path  
-        output_path = open(output_location + "\\FlightPlan-FilmOutput.csv", "w")
+        output_path = output_location + r"\FlightPlan-FilmOutput.csv"
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
@@ -240,7 +240,7 @@ def Digital_input_loop():
 
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path 
-        output_path = open(output_location + "\\FlightPlan-DigitalOutput.csv", "w")
+        output_path = output_location + r"\FlightPlan-DigitalOutput.csv"
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", "Across_Track_Array", 
