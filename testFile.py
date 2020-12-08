@@ -115,19 +115,15 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
 
 def main():
     coords = [[45.5236, -75.6009], [45.3236, -75.6009], [45.3236, -75.7509], [45.5236, -75.7509]]
-    numFlightLines = 4
 
     rcoords = [[] for x in range(4)]
     for x in range(len(coords)):
         for y in range(len(coords[x])):
             rcoords[x].append(math.radians(coords[x][y]))
 
-    hav = haversine(rcoords)
 
     rStart = startingCoords(rcoords, 3910, 4)
-    dStart = [[] for x in range(numFlightLines)]
-    for x in range(len(rStart)):
-        for y in range(len(rStart[x])):
-            dStart[x].append(math.degrees(rStart[x][y]))
+
+    print(rStart)
 
 main()
