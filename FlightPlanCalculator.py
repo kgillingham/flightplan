@@ -44,19 +44,19 @@ output_path = None            # Used to call output csv file in Loop
 def haversine(coordinates):
 
     difflat1 = abs(coordinates[0][0] - coordinates[1][0])
-    difflong1 = abs(coordinates[0][1] - coordinates[1][1])
+    difflong1 = coordinates[1][1] - coordinates[0][1]
     difflat2 = abs(coordinates[2][0] - coordinates[1][0])
-    difflong2 = abs(coordinates[2][1] - coordinates[1][1])
+    difflong2 = coordinates[2][1] - coordinates[1][1]
 
     # calculate the distance and bearing between points 1 and 2 of the rectangle. The bearing is in the direction of 1 to 2
     a1 = math.sin(difflat1/2)**2 + math.cos(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.sin(difflong1/2)**2
     a2 = 2 * radius * math.atan2(math.sqrt(a1), math.sqrt(1 - a1))
-    aBearing = math.atan2(math.sin(difflong1) * math.cos(coordinate[1][0]), math.cos(coordinate[0][0]) * math.sin(coordinate[1][0]) - math.sin(coordinate[0][0]) * math.cos(coordinate[1][0]) * math.cos(difflong1))
+    aBearing = math.atan2(math.sin(difflong1) * math.cos(coordinates[1][0]), math.cos(coordinates[0][0]) * math.sin(coordinates[1][0]) - math.sin(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.cos(difflong1))
 
     # calculate the distance and bearing between points 2 and 3 of the rectangle. The bearing is in the direction of 2 to 3
     b1 = math.sin(difflat2/2)**2 + math.cos(coordinates[2][0]) * math.cos(coordinates[1][0]) * math.sin(difflong2/2)**2
     b2 = 2 * radius * math.atan2(math.sqrt(b1), math.sqrt(1 - b1))
-    bBearing = math.atan2(math.sin(difflong2) * math.cos(coordinate[2][0]), math.cos(coordinate[1][0]) * math.sin(coordinate[2][0]) - math.sin(coordinate[1][0]) * math.cos(coordinate[2][0]) * math.cos(difflong2))
+    bBearing = math.atan2(math.sin(difflong2) * math.cos(coordinates[2][0]), math.cos(coordinates[1][0]) * math.sin(coordinates[2][0]) - math.sin(coordinates[1][0]) * math.cos(coordinates[2][0]) * math.cos(difflong2))
 
     # Whichever side of the rectangle is longer will be the direction the flight lines will be in.
     # The variable oneToTwo will help the startingCoords function determine which corner point to add distance from, to get the starting coordinates of each of the flight lines.
@@ -97,20 +97,32 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
     angularDist = lineDistance / radius
 
     # get the bearing of the short side of the rectangle from the haversine function
-
     haversineResult = haversine(initCoords)
+
     # the bearing of the short side is stored in index 4 of haversineResult
     bearing = haversineResult[3]
 
     # if oneToTwo (index 4 of haversineResult) is true, then measure distance starting at point 2 towards point 3. If it is false, then use points 1 to 2.
     if haversineResult[4]:
-        beginningCoord = initCoords[1]
+        start = initCoords[1]
     else:
-        beginningCoord = initCoords[0]
+        start = initCoords[0]
 
-    # declare list that will store the list of starting coordinates. The number of starting coordinates that will need to be calculated is the number of flight lines - 1
-    startingCoordinates = [[] for x in range(numFlightLines-1)]
+    # declare list that will store the list of starting coordinates
+    startingCoordinates = []
 
+    # append the first coordinate, i.e. one of the points of the rectangle, which will be the starting point of the first flight line
+    startingCoordinates.append(start)
+
+    # Calculate each flight line starting point and append to the startingCoordinates list
+    # The number of starting coordinates that will need to be calculated is the number of flight lines - 1
+    # After each iteration of the for loop, the "start" variable becomes the point that was just calculated; the next flight line starting point will be calculated using that as the starting point
+    for x in range(numFlightLines - 1):
+        destination = destinationPoint(start, bearing, angularDist)
+        startingCoordinates.append(destination)
+        start = destination
+
+    return(startingCoordinates)
     
 
 
