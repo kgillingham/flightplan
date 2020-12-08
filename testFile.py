@@ -116,11 +116,14 @@ def main():
         for y in range(len(coords[x])):
             rcoords[x].append(math.radians(coords[x][y]))
 
+    print(rcoords)
+
+    hav = haversine(rcoords)
+
     rStart = startingCoords(rcoords, 3910, 4)
     dStart = [[] for x in range(numFlightLines)]
     for x in range(len(rStart)):
         for y in range(len(rStart[x])):
             dStart[x].append(math.degrees(rStart[x][y]))
-    print(dStart)
 
 main()

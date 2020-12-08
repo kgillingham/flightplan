@@ -42,7 +42,6 @@ output_path = None            # Used to call output csv file in Loop
 # function calculates the distance and bearing between points 1, 2, and 3 of the rectangle. 
 # The points MUST be inputted so that each successive point is adjacent to the last; i.e. point pairs 1/2, 2/3, or 3/4 cannot be on opposite sides of the rectangle
 def haversine(coordinates):
-
     difflat1 = abs(coordinates[0][0] - coordinates[1][0])
     difflong1 = coordinates[1][1] - coordinates[0][1]
     difflat2 = abs(coordinates[2][0] - coordinates[1][0])
@@ -184,7 +183,7 @@ def Film_input_loop():
         # Call global csv variable and assign name depending on camera type
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path  
-        output_path = output_location + r"\FlightPlan-FilmOutput.csv"
+        output_path = output_location + "FlightPlan-FilmOutput.csv"
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
@@ -240,7 +239,7 @@ def Digital_input_loop():
 
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         global output_path 
-        output_path = output_location + r"\FlightPlan-DigitalOutput.csv"
+        output_path = output_location + "FlightPlan-DigitalOutput.csv"
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", "Across_Track_Array", 
@@ -568,7 +567,7 @@ def Digital_calcandouput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list[index], distancebwlines, flightlines)
+            linestartcoords = startingCoords(coords_list, distancebwlines, flightlines)
 
             #Display final outputs for digital camera
             print("Flying Height: ")
