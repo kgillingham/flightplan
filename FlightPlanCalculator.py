@@ -176,7 +176,8 @@ def Film_input_loop():
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
             "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", "Coordinate2_Longitude",
             "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "", "Flying_Height(meters_above_terrain)",
-             "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line", "", "Line_Starting_Coordinates"])
+             "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line", "", 
+             "Line_Starting_Coordinates(From start to end)"])
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -232,7 +233,7 @@ def Digital_input_loop():
             "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "Coordinate1_Latitude","Coordinate1_Longtitude","Coordinate2_Latitude",
              "Coordinate2_Longitude","Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude","", 
              "Flying_Height(meters_above_terrain", "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)",
-              "", "Total_Photos", "Photos_Per_Line",  "", "Line_Starting_Coordinates"])
+              "", "Total_Photos", "Photos_Per_Line",  "", "Line_Starting_Coordinates(From start to end)"])
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -357,8 +358,6 @@ def Film_calcandoutput_loop():
             length = distance[0]
             width = distance[1]
             longbearing = distance[2]
-            shortbearing = distance[3]
-            oneToTwo = distance[4]
 
             #Calcualte film camera specific variables
             scale = 1/scaleinput
@@ -374,7 +373,7 @@ def Film_calcandoutput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list[index], longbearing, flightlines)
+            linestartcoords = startingCoords(coords_list[index], distancebwlines, flightlines)
 
 
             #display final outputs for film camera
@@ -398,7 +397,7 @@ def Film_calcandoutput_loop():
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, coordinate1[0], coordinate1[1], coordinate2[0], 
                 coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1], "", heightaboveterrain, flyingheight, "", flightlines, 
-                distancebwlines, "", totalphotos, photosperline])    
+                distancebwlines, "", totalphotos, photosperline, ""]+ linestartcoords)    
 
 
 def Digital_calcandouput_loop():
@@ -555,7 +554,7 @@ def Digital_calcandouput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list[index], longbearing, flightlines)
+            linestartcoords = startingCoords(coords_list[index], distancebwlines, flightlines)
 
             #Display final outputs for digital camera
             print("Flying Height: ")
@@ -577,7 +576,7 @@ def Digital_calcandouput_loop():
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, coordinate1[0], coordinate1[1], 
                 coordinate2[0], coordinate2[1], coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1],"", heightaboveterrain, flyingheight, 
-                "", flightlines, distancebwlines, "", totalphotos, photosperline])
+                "", flightlines, distancebwlines, "", totalphotos, photosperline, ""]+ linestartcoords)
 
     
 
