@@ -58,6 +58,8 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
 
     # get the bearing of the short side of the rectangle from the haversine function
     haversineResult = haversine(initCoords)
+
+    print(haversineResult)
     
     # the bearing of the long (index 2) and short (index 3) sides are stored in separate variables
     bearingLong = haversineResult[2]
@@ -108,7 +110,6 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
         for y in range(len(startingCoordinates[x])):
             degCoords[x].append(math.degrees(startingCoordinates[x][y]))
 
-    print(degCoords)
     return(degCoords)
 
 
@@ -121,8 +122,9 @@ def main():
         for y in range(len(coords[x])):
             rcoords[x].append(math.radians(coords[x][y]))
 
-
-    rStart = startingCoords(rcoords, 3910, 4)
+    hav = haversine(coords)
+    print(hav)
+    rStart = startingCoords(rcoords, 2932.5, 5)
 
     print(rStart)
 

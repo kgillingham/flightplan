@@ -131,7 +131,6 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
             intermediatePoint = destinationPoint(start, bearingLongOpposite, angularDistLong)
 
         destination = destinationPoint(intermediatePoint, bearingShort, angularDistShort)
-
         startingCoordinates.append(destination)
         start = destination
 
