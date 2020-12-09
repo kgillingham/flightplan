@@ -52,7 +52,7 @@
 
 # Division of Work: 
 # Kazuto - haversine, destinationPoint, and startingCoords functions
-# Lucy - 
+# Lucy - input loops, calcandoutput loops, csv input and output
 # Sarah - User verification that csv data in appropriate ranges/units. Data Validation. Error Handling. Creation of empty lists for variables
 
 
@@ -83,8 +83,11 @@ pixelsize_list = []                # create empty list for pixel size
 gsd_list = []                      # create empty list for ground sampling distance (?)
 
 # Define global variables 
-radius = 6.3781e6
-output_path = None            # Used to call output csv file in Loop
+radius = 6.3781e6                  # assign radius as a global variable as it will be used throughout the program
+# Ouput_path is a global variable because we want to assign the path and file name depending on the camera type within the main function
+# We did not want to have to return the output_path each loop to be used in the next. This is more efficient
+output_path = None                 # Used to call output csv file in Loop
+
 
 
 
@@ -223,10 +226,13 @@ def Film_input_loop():
     # If user enters Y/y the program will proceed to read the input from their csv, otherwise it will end
     # Program ends instead of loops because the process of checking the data could be lengthy
     if userready.upper() == "Y":
+        # prompt input for file path of desired csv file
         input_path = str(input("Please enter the path to your input data csv file:  "))
+        # open and read csv file and append values to global lists 
         with open(input_path, "r") as input_data:
             input_read = csv.reader(input_data)
-            header = next(input_read)
+            # Skips over first record, which are the headers 
+            next(input_read)
             for record in input_read:
                 focallength_list.append(float(record[0]))
                 elevation_list.append(float(record[1]))
@@ -243,10 +249,13 @@ def Film_input_loop():
                 coords_list[2].append(float(record[12]))
                 coords_list[3].append(float(record[13]))
                 coords_list[3].append(float(record[14]))
-        # Call global csv variable and assign name depending on camera type
+        # prompt input of output csv location path
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
+        # Call global csv variable and assign name depending on camera type
         global output_path  
+        # Name output csv file according to camera type selected
         output_path = output_location + "FlightPlan-FilmOutput.csv"
+        # Open output csv file and append a header row with header
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
@@ -281,10 +290,12 @@ def Digital_input_loop():
     # If user enters Y/y the program will proceed to read the input from their csv, otherwise it will end
     # Program ends instead of loops because the process of checking the data could be lengthy
     if userready.upper() == "Y":
+        # prompt input for string of file path of desired csv file
         input_path = str(input("Please enter the path to your input data csv file:  "))
+        # open and read csv file and append values to global lists 
         with open(input_path, "r") as input_data:
             input_read = csv.reader(input_data)
-            header = next(input_read)
+            next(input_read)
             for record in input_read:
                 focallength_list.append(float(record[0]))
                 elevation_list.append(float(record[1]))
@@ -303,10 +314,13 @@ def Digital_input_loop():
                 coords_list[2].append(float(record[14]))
                 coords_list[3].append(float(record[15]))
                 coords_list[3].append(float(record[16]))
-
+        # prompt input of output csv location path
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
+        # Call global csv variable and assign name depending on camera type
         global output_path 
+        # Name output csv file according to camera type selected
         output_path = output_location + "FlightPlan-DigitalOutput.csv"
+        # Open output csv file and append a header row with header
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", "Across_Track_Array", 
@@ -358,7 +372,7 @@ def Film_calcandoutput_loop():
     speedLow, speedHigh = 50, 350 
     speedCheck = True
     for item in speed_list:
-        if item < 50 or item > 350:
+        if item < speedLow or item > speedHigh:
             speedCheck = False
             break
     # Check Film Format
@@ -420,7 +434,9 @@ def Film_calcandoutput_loop():
         print("Please check your data inputs.")
     # Proceed with calculations having validated the input data
     else:
+        # If program passes data validation, it is passed into the calculations loop
         for index in range(len(focallength_list)):
+            # values from input lists are assigned to local variables for calculations
             scaleinput = scaleinput_list[index]
             filmformatsizeinput = filmformatsizeinput_list[index]
             elevation = elevation_list[index]
@@ -443,9 +459,9 @@ def Film_calcandoutput_loop():
             distance = haversine(rcoords)
             length = distance[0]
             width = distance[1]
-            longbearing = distance[2]
 
-            #Calcualte film camera specific variables
+            # Calcualte digital camera specific variables using equations found:
+            # Lillesand, T.M., Kiefer, R.W., Chipman, J.W. (2018). Remote Sensing And Image Interpretation – Seventh Edition. Wiley.
             scale = 1/scaleinput
             filmformatsize = filmformatsizeinput/1000
             flyingheight = (focallength/1000/scale)+elevation
@@ -477,7 +493,7 @@ def Film_calcandoutput_loop():
             photosperline, ". \n")
             print("The total number of photographs taken will be ", totalphotos, ".")
 
-            # Create and
+            # Open output csv file and append the calculated values to a new row
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, coordinate1[0], coordinate1[1], coordinate2[0], 
@@ -524,7 +540,7 @@ def Digital_calcandouput_loop():
     speedLow, speedHigh = 50, 350 
     speedCheck = True
     for item in speed_list:
-        if item < 50 or item > 350:
+        if item < speedLow or item > speedHigh:
             speedCheck = False
             break
     # Check Across Track Array
@@ -605,7 +621,9 @@ def Digital_calcandouput_loop():
         print("Please check your data inputs.")
     # Proceed with calculations having validated the input data
     else:
+        # If program passes data validation, it is passed into the calculations loop
         for index in range(len(focallength_list)):
+            # values from input lists are assigned to local variables for calculations
             focallength = focallength_list[index]
             elevation = elevation_list[index]
             endlap = endlap_list[index]
@@ -631,9 +649,9 @@ def Digital_calcandouput_loop():
             distance = haversine(rcoords)
             length = distance[0]
             width = distance[1]
-            longbearing = distance[2]
 
-            #Calcualte digital camera specific variables
+            # Calcualte digital camera specific variables using equations found:
+            # Lillesand, T.M., Kiefer, R.W., Chipman, J.W. (2018). Remote Sensing And Image Interpretation – Seventh Edition. Wiley.
             flyingheight = ((gsd*focallength)/pixelsize)+elevation
             heightaboveterrain = flyingheight-elevation 
             acrosscoverage = (((acrosstrack*pixelsize)*heightaboveterrain)/focallength)
@@ -662,7 +680,7 @@ def Digital_calcandouput_loop():
             print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
             print("With a distance of ", groundphotosep, " metres between photographs, the minimum number of photos per line is ", photosperline, ". \n")
             print("The total number of photographs taken will be ", totalphotos, ".")
-
+            # Open output csv and append the calculated values to a new row
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, acrosstrack, alongtrack, pixelsize, gsd, coordinate1[0], coordinate1[1], 
@@ -675,40 +693,38 @@ def Digital_calcandouput_loop():
 def main():
     # Exception handling takes place once the main function is called
     # It is known that null values in the csv file will cause a ValueError
-    #try:
-    
-    # Display Program Purpose to the user
-    print("This program will aid the designing process of an aerial photography remote sensing mission.") 
-    print("Specifically, this program will calculate the location, direction, and number of flight lines")
-    print("necessary to adequately photograph a given area, as well as the elevation at which the aircraft should fly.")
-    print()
-    print("For the purpose of this calculation, average terrain elevation and flying height of aircraft will not vary")
-    print("over the desired study area.")
-    print()
-    # Get input for camera type
-    cameratype = input("Will the camera be digital (D) or film (F)?: ")
-    if cameratype.upper() == "F":
-        Film_input_loop()
-        Film_calcandoutput_loop()
-    elif cameratype.upper() == "D":
-        Digital_input_loop()
-        Digital_calcandouput_loop()
-
+    try:
+        # Display Program Purpose to the user
+        print("This program will aid the designing process of an aerial photography remote sensing mission.") 
+        print("Specifically, this program will calculate the location, direction, and number of flight lines")
+        print("necessary to adequately photograph a given area, as well as the elevation at which the aircraft should fly.")
+        print()
+        print("For the purpose of this calculation, average terrain elevation and flying height of aircraft will not vary")
+        print("over the desired study area.")
+        print()
+        # Get input for camera type
+        cameratype = input("Will the camera be digital (D) or film (F)?: ")
+        if cameratype.upper() == "F":
+            Film_input_loop()
+            Film_calcandoutput_loop()
+        elif cameratype.upper() == "D":
+            Digital_input_loop()
+            Digital_calcandouput_loop()
     # The following exceptions were added to try condition to catch any errors that might occur
     # The errors are displayed as a message, with an addition for ValueError
-    # except TypeError as message:
-    #     print(" There was an error: ", message)
-    # except NameError as message:
-    #     print(" There was an error: ", message)
-    # except ValueError as message:
-    #     print(" There was an error: ", message)
-    #     print(" A ValueError may result from the occurence of null values in the csv.")
-    # except SyntaxError as message: 
-    #     print(" There was an error: ", message)
-    # except RuntimeError as message:
-    #     print(" There was an error: ", message)
-    # except Exception as message:
-    #     print(" There was an error: ", message)
+    except TypeError as message:
+        print(" There was an error: ", message)
+    except NameError as message:
+        print(" There was an error: ", message)
+    except ValueError as message:
+        print(" There was an error: ", message)
+        print(" A ValueError may result from the occurence of null values in the csv.")
+    except SyntaxError as message: 
+        print(" There was an error: ", message)
+    except RuntimeError as message:
+        print(" There was an error: ", message)
+    except Exception as message:
+        print(" There was an error: ", message)
 
 if __name__ == "__main__":
     main()
