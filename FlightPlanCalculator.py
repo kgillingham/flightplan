@@ -400,7 +400,7 @@ def Film_calcandoutput_loop():
             scaleinput = scaleinput_list[index]
             filmformatsizeinput = filmformatsizeinput_list[index]
             elevation = elevation_list[index]
-            focallength = focallength_list[index]
+            focallength = focallength_list[index] / 1000
             endlap = endlap_list[index]
             sidelap = sidelap_list[index]
             speed = speed_list[index]
@@ -424,7 +424,7 @@ def Film_calcandoutput_loop():
             #Calcualte film camera specific variables
             scale = 1/scaleinput
             filmformatsize = filmformatsizeinput/1000
-            flyingheight = (focallength*10/scale)+elevation
+            flyingheight = (focallength/scale)+elevation
             singleimagegc = filmformatsize/scale
             groundphotosep = (1-endlap)*singleimagegc
             exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
@@ -457,7 +457,7 @@ def Film_calcandoutput_loop():
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, coordinate1[0], coordinate1[1], coordinate2[0], 
-                coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1], "", flyingheight, "", flightlines, 
+                coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1], "", flyingheight, flightlines, 
                 distancebwlines, "", totalphotos, photosperline, ""]+ linestartcoords)    
 
 
