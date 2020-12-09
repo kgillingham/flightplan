@@ -11,7 +11,11 @@
 # Outputs displayed on screen and in a CSV file
  
 # Program Summary:
- 
+# This program takes user input of flight plan parameters in the form of a csv file and calculates
+# all necessary parameters needed to execute the flight plan. Results are outputed in a csv file containing
+# inputs, intermediate calculation values, and final flight plan parameters. More than 1 flight plan can be 
+# calculated at once for ease of use. 
+
 # Assumptions Affecting Program Strcture:
 # It is assumed that terrain elevation does not change over the study area (we use "Average Terrain Elevation")
 # It is assumed that the flying height of the aircraft stays constant over the study area.
@@ -67,7 +71,8 @@
 # Division of Work: 
 # Kazuto - haversine, destinationPoint, and startingCoords functions
 # Lucy - input loops, calcandoutput loops, csv input and output
-# Sarah - User verification that csv data in appropriate ranges/units. Data Validation. Error Handling. Creation of empty lists for variables
+# Sarah - User verification that csv data in appropriate ranges/units. Data Validation. Error Handling. Creation of empty 
+#         lists for variables
 
 
 # import math module for various trigonmetric functions
@@ -98,7 +103,8 @@ gsd_list = []                      # create empty list for ground sampling dista
 
 # Define global variables 
 radius = 6.3781e6                  # assign radius as a global variable as it will be used throughout the program
-# Ouput_path is a global variable because we want to assign the path and file name depending on the camera type within the main function
+# Ouput_path is a global variable because we want to assign the path and file name depending on the camera type within the
+#  main function
 # We did not want to have to return the output_path each loop to be used in the next. This is more efficient
 output_path = None                 # Used to call output csv file in Loop
 
@@ -106,7 +112,8 @@ output_path = None                 # Used to call output csv file in Loop
 
 
 # Function calculates the distance and bearing between points 1 to 2, and 2 to 3 of the rectangle. 
-# The points MUST be inputted so that each successive point is adjacent to the last; i.e. point pairs 1/2, 2/3, or 3/4 cannot be on opposite sides of the rectangle
+# The points MUST be inputted so that each successive point is adjacent to the last; i.e. point pairs 1/2, 2/3, or 3/4 
+# cannot be on opposite sides of the rectangle
 # Coordinates passed to this function must be in radians.
 def haversine(coordinates):
     # Calculate difference in lat/longs of the point pairs 1/2 and 2/3
@@ -118,17 +125,22 @@ def haversine(coordinates):
     # Calculate the distance and bearing between points 1 and 2 of the rectangle. The bearing is in the direction of 1 to 2.
     a1 = math.sin(difflat1/2)**2 + math.cos(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.sin(difflong1/2)**2
     a2 = 2 * radius * math.atan2(math.sqrt(a1), math.sqrt(1 - a1))
-    aBearing = math.atan2(math.sin(difflong1) * math.cos(coordinates[1][0]), math.cos(coordinates[0][0]) * math.sin(coordinates[1][0]) - math.sin(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.cos(difflong1))
+    aBearing = math.atan2(math.sin(difflong1) * math.cos(coordinates[1][0]), math.cos(coordinates[0][0]) * math.sin(coordinates[1][0]) 
+    - math.sin(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.cos(difflong1))
 
     # Calculate the distance and bearing between points 2 and 3 of the rectangle. The bearing is in the direction of 2 to 3.
     b1 = math.sin(difflat2/2)**2 + math.cos(coordinates[2][0]) * math.cos(coordinates[1][0]) * math.sin(difflong2/2)**2
     b2 = 2 * radius * math.atan2(math.sqrt(b1), math.sqrt(1 - b1))
-    bBearing = math.atan2(math.sin(difflong2) * math.cos(coordinates[2][0]), math.cos(coordinates[1][0]) * math.sin(coordinates[2][0]) - math.sin(coordinates[1][0]) * math.cos(coordinates[2][0]) * math.cos(difflong2))
+    bBearing = math.atan2(math.sin(difflong2) * math.cos(coordinates[2][0]), math.cos(coordinates[1][0]) * math.sin(coordinates[2][0]) 
+    - math.sin(coordinates[1][0]) * math.cos(coordinates[2][0]) * math.cos(difflong2))
 
     # Whichever side of the rectangle is longer will be the direction the flight lines will be in.
-    # The variable oneToTwo will help the startingCoords function determine which corner point to add distance from, to get the starting coordinates of each of the flight lines.
-    # If oneToTwo is True, this means that the long side of the rectangle is along the line between points 1 and 2 (point 1 is the first coordinate inputted by the user, point 2 is the second, etc).
-    # In this case shortBearing is the bearing from point 2 to point 3, which is the bearing that distance will be measured to calculate the starting coordinates of the flight lines.
+    # The variable oneToTwo will help the startingCoords function determine which corner point to add distance from, to get the starting
+    #  coordinates of each of the flight lines.
+    # If oneToTwo is True, this means that the long side of the rectangle is along the line between points 1 and 2 (point 1 is the first
+    #  coordinate inputted by the user, point 2 is the second, etc).
+    # In this case shortBearing is the bearing from point 2 to point 3, which is the bearing that distance will be measured to calculate
+    #  the starting coordinates of the flight lines.
 
     if a2 >= b2:
         length = a2
@@ -143,7 +155,8 @@ def haversine(coordinates):
         shortBearing = aBearing
         oneToTwo = False
     
-    # function returns the length and width of the rectangle, the bearings of the long and short sides, and a boolean value containing whether or not the line between
+    # function returns the length and width of the rectangle, the bearings of the long and short sides, and a boolean value containing 
+    # whether or not the line between
     # points 1 and 2 is the long side. Angles will be in radians
     return length, width, longBearing, shortBearing, oneToTwo
 
@@ -152,9 +165,11 @@ def haversine(coordinates):
 def destinationPoint(startingPoint, direction, angularDistance):
     nextCoordinates = []
     # Calculate the lat of the destination point
-    nextCoordinates.append(math.asin(math.sin(startingPoint[0]) * math.cos(angularDistance) + math.cos(startingPoint[0]) * math.sin(angularDistance) * math.cos(direction)))
+    nextCoordinates.append(math.asin(math.sin(startingPoint[0]) * math.cos(angularDistance) + math.cos(startingPoint[0]) * 
+    math.sin(angularDistance) * math.cos(direction)))
     # Calculate the long of the destination point
-    nextCoordinates.append(startingPoint[1] + math.atan2(math.sin(direction) * math.sin(angularDistance) * math.cos(startingPoint[0]), math.cos(angularDistance) - math.sin(startingPoint[0]) * math.sin(nextCoordinates[0])))
+    nextCoordinates.append(startingPoint[1] + math.atan2(math.sin(direction) * math.sin(angularDistance) * 
+    math.cos(startingPoint[0]), math.cos(angularDistance) - math.sin(startingPoint[0]) * math.sin(nextCoordinates[0])))
     # Returns one pair of lat long coordinates in radians.
     return nextCoordinates
 
@@ -180,22 +195,27 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
     # Angular distance of the long side of the rectangle.
     angularDistLong = haversineResult[0] / radius
 
-    # If oneToTwo (index 4 of haversineResult) is true, then measure flight lines starting at point 2 towards point 3. If it is false, then start at point 1 and go towards 2.
+    # If oneToTwo (index 4 of haversineResult) is true, then measure flight lines starting at point 2 towards point 3. If 
+    # it is false, then start at point 1 and go towards 2.
     if haversineResult[4]:
         start = initCoords[1]
     else:
         start = initCoords[0]
 
-    # Declare list that will store the list of starting coordinates. The number of starting coordinates that will need to be calculated is the number of flight lines - 1.
+    # Declare list that will store the list of starting coordinates. The number of starting coordinates that will need to 
+    # be calculated is the number of flight lines - 1.
     startingCoordinates = []
     # Append the coordinates of the corner of the rectangle, which will be the start location of the first flight line.
     startingCoordinates.append(start)
 
     
     # This next chunk of code is hard to explain without a diagram but I will try. 
-    # Adjacent flight lines must start at opposite ends of the rectangle, as that will be the direction that the plane will be coming from after flying across it in one direction.
-    # In order to calculate the starting coordinates of the next flight line, first an intermediate point must be calculated which is on the opposite side of the rectangle, 
-    # on the line parallel to the long side of the rectangle starting from the previous point. From this intermediate point, the next starting point can be calculated 
+    # Adjacent flight lines must start at opposite ends of the rectangle, as that will be the direction that the plane will
+    #  be coming from after flying across it in one direction.
+    # In order to calculate the starting coordinates of the next flight line, first an intermediate point must be calculated
+    #  which is on the opposite side of the rectangle, 
+    # on the line parallel to the long side of the rectangle starting from the previous point. From this intermediate point,
+    #  the next starting point can be calculated 
     # by adding the distance between flight lines in the short bearing direction.
     # If the iterator x is an even number then the opposite of the long bearing must be used.
     for x in range(numFlightLines - 1):
@@ -280,10 +300,10 @@ def Film_input_loop():
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
-            "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", "Coordinate2_Longitude",
-            "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "",
-             "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line", "", 
-             "Line_Starting_Coordinates(From start to end)"])
+            "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", 
+            "Coordinate2_Longitude", "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", 
+            "Coordinate4_Longtitude", "", "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", 
+            "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line", "", "Line_Starting_Coordinates(From start to end)"])
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -351,11 +371,12 @@ def Digital_input_loop():
         # Open output csv file and append a header row with header
         with open(output_path, "a") as output_data:
             headwriter = csv.writer(output_data)
-            headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", "Across_Track_Array", 
-            "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "Coordinate1_Latitude","Coordinate1_Longtitude","Coordinate2_Latitude",
-             "Coordinate2_Longitude","Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude","", 
-             "Flying_Height(meters_above_terrain", "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)",
-              "", "Total_Photos", "Photos_Per_Line",  "", "Line_Starting_Coordinates(From start to end)"])
+            headwriter.writerow(["Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
+            "Across_Track_Array", "Along_Track_Array", "Pixel_Size(mm)", "Ground_Sampling_Distance(m)", "Coordinate1_Latitude",
+            "Coordinate1_Longtitude","Coordinate2_Latitude","Coordinate2_Longitude","Coordinate3_Latitude","Coordinate3_Longitude", 
+            "Coordinate4_Latitude", "Coordinate4_Longtitude","", "Flying_Height(meters_above_terrain", 
+            "Flying_Height_Above_Sea_Level(m)", "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)","", 
+            "Total_Photos", "Photos_Per_Line",  "", "Line_Starting_Coordinates(From start to end)"])
     else:
         print("Please confirm that you have checked your input data.")
 
@@ -526,6 +547,7 @@ def Film_calcandoutput_loop():
             print("\n\n******************************************************************************\n\n")
 
             # Open output csv file and append the calculated values to a new row
+    
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, coordinate1[0], coordinate1[1], coordinate2[0], 
