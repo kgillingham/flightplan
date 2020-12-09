@@ -131,7 +131,6 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
             intermediatePoint = destinationPoint(start, bearingLongOpposite, angularDistLong)
 
         destination = destinationPoint(intermediatePoint, bearingShort, angularDistShort)
-
         startingCoordinates.append(destination)
         start = destination
 
@@ -389,7 +388,7 @@ def Film_calcandoutput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list[index], distancebwlines, flightlines)
+            linestartcoords = startingCoords(rcoords, distancebwlines, flightlines)
 
 
             #display final outputs for film camera
@@ -570,7 +569,7 @@ def Digital_calcandouput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list, distancebwlines, flightlines)
+            linestartcoords = startingCoords(rcoords, distancebwlines, flightlines)
 
             #Display final outputs for digital camera
             print("Flying Height: ")
