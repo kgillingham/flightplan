@@ -71,7 +71,7 @@ elevation_list = []                # create empty list for elevation
 endlap_list = []                   # create empty list for endlap
 sidelap_list = []                  # create empty list for sidelap
 speed_list = []                    # create empty list for speed
-coords_list = [[] for x in range(4)]       # create empty list to store pairs of coordinates
+coords_list = [[] for x in range(16)]       # create empty list to store pairs of coordinates
 
 # Lists for Film
 filmformatsizeinput_list = []      # create empty list for film format size input
@@ -296,6 +296,7 @@ def Digital_input_loop():
         with open(input_path, "r") as input_data:
             input_read = csv.reader(input_data)
             next(input_read)
+            x = 0
             for record in input_read:
                 focallength_list.append(float(record[0]))
                 elevation_list.append(float(record[1]))
@@ -306,14 +307,15 @@ def Digital_input_loop():
                 alongtrack_list.append(float(record[6]))
                 pixelsize_list.append(float(record[7]))
                 gsd_list.append(float(record[8]))
-                coords_list[0].append(float(record[9]))
-                coords_list[0].append(float(record[10]))
-                coords_list[1].append(float(record[11]))
-                coords_list[1].append(float(record[12]))
-                coords_list[2].append(float(record[13]))
-                coords_list[2].append(float(record[14]))
-                coords_list[3].append(float(record[15]))
-                coords_list[3].append(float(record[16]))
+                coords_list[x].append(float(record[9]))
+                coords_list[x].append(float(record[10]))
+                coords_list[x + 1].append(float(record[11]))
+                coords_list[x + 1].append(float(record[12]))
+                coords_list[x + 2].append(float(record[13]))
+                coords_list[x + 2].append(float(record[14]))
+                coords_list[x + 3].append(float(record[15]))
+                coords_list[x + 3].append(float(record[16]))
+                x += 4
         # prompt input of output csv location path
         output_location = str(input("What is the file path to the folder you want the output csv to be in?:   "))
         # Call global csv variable and assign name depending on camera type
@@ -622,6 +624,7 @@ def Digital_calcandouput_loop():
     # Proceed with calculations having validated the input data
     else:
         # If program passes data validation, it is passed into the calculations loop
+        x = 0
         for index in range(len(focallength_list)):
             # values from input lists are assigned to local variables for calculations
             focallength = focallength_list[index]
@@ -633,17 +636,18 @@ def Digital_calcandouput_loop():
             alongtrack = alongtrack_list[index]
             pixelsize = pixelsize_list[index]
             gsd = gsd_list[index]
-            coordinate1 = coords_list[0][0], coords_list[0][1]
-            coordinate2 = coords_list[1][0], coords_list[1][1]
-            coordinate3 = coords_list[2][0], coords_list[2][1]
-            coordinate4 = coords_list[3][0], coords_list[3][1]
-
+            coordinate1 = [coords_list[x][0], coords_list[x][1]]
+            coordinate2 = [coords_list[x + 1][0], coords_list[x + 1][1]]
+            coordinate3 = [coords_list[x + 2][0], coords_list[x + 2][1]]
+            coordinate4 = [coords_list[x + 3][0], coords_list[x + 3][1]]
+            x += 4
 
             # convert degrees to radians, store in list
+            dcoords = [coordinate1, coordinate2, coordinate3, coordinate4]
             rcoords = [[] for x in range(4)]
-            for x in range(len(coords_list)):
-                for y in range(len(coords_list[x])):
-                    rcoords[x].append(math.radians(coords_list[x][y]))
+            for b in range(len(rcoords)):
+                for c in range(2):
+                    rcoords[b].append(math.radians(dcoords[b][c]))
 
             # pass radian values to haversine function
             distance = haversine(rcoords)
@@ -693,38 +697,38 @@ def Digital_calcandouput_loop():
 def main():
     # Exception handling takes place once the main function is called
     # It is known that null values in the csv file will cause a ValueError
-    try:
-        # Display Program Purpose to the user
-        print("This program will aid the designing process of an aerial photography remote sensing mission.") 
-        print("Specifically, this program will calculate the location, direction, and number of flight lines")
-        print("necessary to adequately photograph a given area, as well as the elevation at which the aircraft should fly.")
-        print()
-        print("For the purpose of this calculation, average terrain elevation and flying height of aircraft will not vary")
-        print("over the desired study area.")
-        print()
-        # Get input for camera type
-        cameratype = input("Will the camera be digital (D) or film (F)?: ")
-        if cameratype.upper() == "F":
-            Film_input_loop()
-            Film_calcandoutput_loop()
-        elif cameratype.upper() == "D":
-            Digital_input_loop()
-            Digital_calcandouput_loop()
+    #try:
+    # Display Program Purpose to the user
+    print("This program will aid the designing process of an aerial photography remote sensing mission.") 
+    print("Specifically, this program will calculate the location, direction, and number of flight lines")
+    print("necessary to adequately photograph a given area, as well as the elevation at which the aircraft should fly.")
+    print()
+    print("For the purpose of this calculation, average terrain elevation and flying height of aircraft will not vary")
+    print("over the desired study area.")
+    print()
+    # Get input for camera type
+    cameratype = input("Will the camera be digital (D) or film (F)?: ")
+    if cameratype.upper() == "F":
+        Film_input_loop()
+        Film_calcandoutput_loop()
+    elif cameratype.upper() == "D":
+        Digital_input_loop()
+        Digital_calcandouput_loop()
     # The following exceptions were added to try condition to catch any errors that might occur
     # The errors are displayed as a message, with an addition for ValueError
-    except TypeError as message:
-        print(" There was an error: ", message)
-    except NameError as message:
-        print(" There was an error: ", message)
-    except ValueError as message:
-        print(" There was an error: ", message)
-        print(" A ValueError may result from the occurence of null values in the csv.")
-    except SyntaxError as message: 
-        print(" There was an error: ", message)
-    except RuntimeError as message:
-        print(" There was an error: ", message)
-    except Exception as message:
-        print(" There was an error: ", message)
+    # except TypeError as message:
+    #     print(" There was an error: ", message)
+    # except NameError as message:
+    #     print(" There was an error: ", message)
+    # except ValueError as message:
+    #     print(" There was an error: ", message)
+    #     print(" A ValueError may result from the occurence of null values in the csv.")
+    # except SyntaxError as message: 
+    #     print(" There was an error: ", message)
+    # except RuntimeError as message:
+    #     print(" There was an error: ", message)
+    # except Exception as message:
+    #     print(" There was an error: ", message)
 
 if __name__ == "__main__":
     main()
