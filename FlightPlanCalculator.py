@@ -747,17 +747,17 @@ def main():
     # The errors are displayed as a message, with an addition for ValueError
     except TypeError as message:
         print(" There was an error: ", message)
-    # except NameError as message:
-    #     print(" There was an error: ", message)
-    # except ValueError as message:
-    #     print(" There was an error: ", message)
-    #     print(" A ValueError may result from the occurence of null values in the csv.")
-    # except SyntaxError as message: 
-    #     print(" There was an error: ", message)
-    # except RuntimeError as message:
-    #     print(" There was an error: ", message)
-    # except Exception as message:
-    #     print(" There was an error: ", message)
+    except NameError as message:
+        print(" There was an error: ", message)
+    except ValueError as message:
+        print(" There was an error: ", message)
+        print(" A ValueError may result from the occurence of null values in the csv.")
+    except SyntaxError as message: 
+        print(" There was an error: ", message)
+    except RuntimeError as message:
+        print(" There was an error: ", message)
+    except Exception as message:
+        print(" There was an error: ", message)
 
 if __name__ == "__main__":
     main()
