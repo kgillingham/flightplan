@@ -393,17 +393,17 @@ def Film_calcandoutput_loop():
             #display final outputs for film camera
             print("Flying Height: ")
             print("With a camera focal length of ", focallength, " millimetres and a desired scale of 1:", scaleinput, 
-            " at an average terrain elevation of ", elevation, " metres above sea level, flying height above terrain is ", flyingheight, ". /n")
+            " at an average terrain elevation of ", elevation, " metres above sea level, flying height above terrain is ", flyingheight, ". \n")
             print("Minimum Flight Lines: ")
             print("With a film format size of ", filmformatsizeinput, " millimetres and scale of 1:", scaleinput, 
             ", the ground cover of a single image is ", singleimagegc, "metres on a side")
             print("With a desired sidelap of ", (sidelap*100), "%, there should be ", distancebwlines, " metres between flight lines.")
-            print("With the study area wdith of ", width, " metres, the minimum number of flight lines is ", flightlines, ". /n")
+            print("With the study area wdith of ", width, " metres, the minimum number of flight lines is ", flightlines, ". \n")
             print("Minimum Numbers of Photographs: ")
             print("With a desired endlap of ", (endlap*100), "%, ground photo seperation is ", groundphotosep, " metres.")
             print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
             print("With an adjusted distance of ", adjustedgroundphotosep, " metres between photographs, the minimum number of photos per line is ", 
-            photosperline, ". /n")
+            photosperline, ". \n")
             print("The total number of photographs taken will be ", totalphotos, ".")
 
             # Create and
@@ -574,16 +574,16 @@ def Digital_calcandouput_loop():
             print("Flying Height: ")
             print("With a focal length of ", focallength, " millimetres, a pixel size of ", pixelsize, 
             " millimetres, a ground sampling distance of ", gsd, " metres, and at an average terrain elevation of ", elevation, 
-            " metres above sea level, flying height above terrain is ", heightaboveterrain, " metres. /n")
+            " metres above sea level, flying height above terrain is ", heightaboveterrain, " metres. \n")
             print("Minimum Flight Lines: ")
             print("Across track ground coverage distance with ", acrosstrack, " pixels is ", acrosscoverage, " metres.")
             print("With a desired sidelap of ", sidelap, "%, there should be ", distancebwlines, " metres between flight lines.")
-            print("With a study area width of ", width, " metres, the minimum number of flight lines is ", flightlines, ". /n")
+            print("With a study area width of ", width, " metres, the minimum number of flight lines is ", flightlines, ". \n")
             print("Minimum Number of Photographs: ")
             print("Along track ground coverage distance with ", alongtrack, " pixels is ", alongcoverage, " metres.")
             print("With a desired endlap of ", endlap, " %, ground photo seperation is ", groundphotosep, " metres.")
             print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
-            print("With a distance of ", groundphotosep, " metres between photographs, the minimum number of photos per line is ", photosperline, ". /n")
+            print("With a distance of ", groundphotosep, " metres between photographs, the minimum number of photos per line is ", photosperline, ". \n")
             print("The total number of photographs taken will be ", totalphotos, ".")
 
             with open(output_path, "a") as output_data:
