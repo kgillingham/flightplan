@@ -191,7 +191,7 @@ def Film_input_loop():
             headwriter = csv.writer(output_data)
             headwriter.writerow([ "Focal_Length(mm)", "Elevation_(meters_ASL)", "Endlap_(%)", "Sidelap_(%)", "Speed_(Km/h)", 
             "Film_Format_Size(mm)", "Scale_(1:  )","Coordinate1_Latitude","Coordinate1_Longtitude", "Coordinate2_Latitude", "Coordinate2_Longitude",
-            "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "", "Flying_Height(meters_above_terrain)",
+            "Coordinate3_Latitude","Coordinate3_Longitude", "Coordinate4_Latitude", "Coordinate4_Longtitude", "",
              "Flying_Height_Above_Sea_Level(m)" "", "Minimum_Flight_Lines", "Distance_Between_Lines(m)", "", "Total_Photos", "Photos_Per_Line", "", 
              "Line_Starting_Coordinates(From start to end)"])
     else:
@@ -378,8 +378,7 @@ def Film_calcandoutput_loop():
             #Calcualte film camera specific variables
             scale = 1/scaleinput
             filmformatsize = filmformatsizeinput/1000
-            flyingheight = (focallength/scale)+elevation
-            heightaboveterrain = flyingheight - elevation
+            flyingheight = (focallength*10/scale)+elevation
             singleimagegc = filmformatsize/scale
             groundphotosep = (1-endlap)*singleimagegc
             exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
@@ -389,13 +388,13 @@ def Film_calcandoutput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list[index], distancebwlines, flightlines)
+            linestartcoords = startingCoords(rcoords, distancebwlines, flightlines)
 
 
             #display final outputs for film camera
             print("Flying Height: ")
             print("With a camera focal length of ", focallength, " millimetres and a desired scale of 1:", scaleinput, 
-            " at an average terrain elevation of ", elevation, " metres above sea level, flying height above terrain is ", heightaboveterrain, ". /n")
+            " at an average terrain elevation of ", elevation, " metres above sea level, flying height above terrain is ", flyingheight, ". /n")
             print("Minimum Flight Lines: ")
             print("With a film format size of ", filmformatsizeinput, " millimetres and scale of 1:", scaleinput, 
             ", the ground cover of a single image is ", singleimagegc, "metres on a side")
@@ -412,7 +411,7 @@ def Film_calcandoutput_loop():
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
                 writer.writerow([focallength, elevation, endlap, sidelap, speed, filmformatsizeinput, scaleinput, coordinate1[0], coordinate1[1], coordinate2[0], 
-                coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1], "", heightaboveterrain, flyingheight, "", flightlines, 
+                coordinate2[1],coordinate3[0], coordinate3[1], coordinate4[0], coordinate4[1], "", flyingheight, "", flightlines, 
                 distancebwlines, "", totalphotos, photosperline, ""]+ linestartcoords)    
 
 
@@ -570,7 +569,7 @@ def Digital_calcandouput_loop():
             flightlines = math.ceil((width/distancebwlines)+1)
             totalphotos = flightlines*photosperline
 
-            linestartcoords = startingCoords(coords_list, distancebwlines, flightlines)
+            linestartcoords = startingCoords(rcoords, distancebwlines, flightlines)
 
             #Display final outputs for digital camera
             print("Flying Height: ")
