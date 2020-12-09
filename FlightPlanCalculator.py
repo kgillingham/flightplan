@@ -27,7 +27,7 @@
 ### Citations ###
 # Lillesand, T.M., Kiefer, R.W., Chipman, J.W. (2018). Remote Sensing And Image Interpretation – Seventh Edition. Wiley.
 
-# Kazuto - 
+# Kazuto - haversine, destinationPoint, and startingCoords functions
 # Lucy - 
 # Sarah - User verification that csv data in appropriate ranges/units. Data Validation. Error Handling. Creation of empty lists for variables
 
@@ -64,20 +64,22 @@ output_path = None            # Used to call output csv file in Loop
 
 
 
-# function calculates the distance and bearing between points 1, 2, and 3 of the rectangle. 
+# Function calculates the distance and bearing between points 1 to 2, and 2 to 3 of the rectangle. 
 # The points MUST be inputted so that each successive point is adjacent to the last; i.e. point pairs 1/2, 2/3, or 3/4 cannot be on opposite sides of the rectangle
+# Coordinates passed to this function must be in radians.
 def haversine(coordinates):
+    # Calculate difference in lat/longs of the point pairs 1/2 and 2/3
     difflat1 = abs(coordinates[0][0] - coordinates[1][0])
     difflong1 = coordinates[1][1] - coordinates[0][1]
     difflat2 = abs(coordinates[2][0] - coordinates[1][0])
     difflong2 = coordinates[2][1] - coordinates[1][1]
 
-    # calculate the distance and bearing between points 1 and 2 of the rectangle. The bearing is in the direction of 1 to 2
+    # Calculate the distance and bearing between points 1 and 2 of the rectangle. The bearing is in the direction of 1 to 2.
     a1 = math.sin(difflat1/2)**2 + math.cos(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.sin(difflong1/2)**2
     a2 = 2 * radius * math.atan2(math.sqrt(a1), math.sqrt(1 - a1))
     aBearing = math.atan2(math.sin(difflong1) * math.cos(coordinates[1][0]), math.cos(coordinates[0][0]) * math.sin(coordinates[1][0]) - math.sin(coordinates[0][0]) * math.cos(coordinates[1][0]) * math.cos(difflong1))
 
-    # calculate the distance and bearing between points 2 and 3 of the rectangle. The bearing is in the direction of 2 to 3
+    # Calculate the distance and bearing between points 2 and 3 of the rectangle. The bearing is in the direction of 2 to 3.
     b1 = math.sin(difflat2/2)**2 + math.cos(coordinates[2][0]) * math.cos(coordinates[1][0]) * math.sin(difflong2/2)**2
     b2 = 2 * radius * math.atan2(math.sqrt(b1), math.sqrt(1 - b1))
     bBearing = math.atan2(math.sin(difflong2) * math.cos(coordinates[2][0]), math.cos(coordinates[1][0]) * math.sin(coordinates[2][0]) - math.sin(coordinates[1][0]) * math.cos(coordinates[2][0]) * math.cos(difflong2))
@@ -85,8 +87,7 @@ def haversine(coordinates):
     # Whichever side of the rectangle is longer will be the direction the flight lines will be in.
     # The variable oneToTwo will help the startingCoords function determine which corner point to add distance from, to get the starting coordinates of each of the flight lines.
     # If oneToTwo is True, this means that the long side of the rectangle is along the line between points 1 and 2 (point 1 is the first coordinate inputted by the user, point 2 is the second, etc).
-    # In this case shortBearing is the bearing from point 2 to point 3, which is the bearing that distance will be measured along starting at point 2, which will result in the starting coordinates
-    # of the flight lines. Am I making any sense?????? 
+    # In this case shortBearing is the bearing from point 2 to point 3, which is the bearing that distance will be measured to calculate the starting coordinates of the flight lines.
 
     if a2 >= b2:
         length = a2
@@ -101,53 +102,60 @@ def haversine(coordinates):
         shortBearing = aBearing
         oneToTwo = False
     
+    # function returns the length and width of the rectangle, the bearings of the long and short sides, and a boolean value containing whether or not the line between
+    # points 1 and 2 is the long side. Angles will be in radians
     return length, width, longBearing, shortBearing, oneToTwo
 
 
-
+# Function receives 3 parameters (coordinates of the starting point, the bearing to add distance in, and the angular distance).
 def destinationPoint(startingPoint, direction, angularDistance):
     nextCoordinates = []
+    # Calculate the lat of the destination point
     nextCoordinates.append(math.asin(math.sin(startingPoint[0]) * math.cos(angularDistance) + math.cos(startingPoint[0]) * math.sin(angularDistance) * math.cos(direction)))
+    # Calculate the long of the destination point
     nextCoordinates.append(startingPoint[1] + math.atan2(math.sin(direction) * math.sin(angularDistance) * math.cos(startingPoint[0]), math.cos(angularDistance) - math.sin(startingPoint[0]) * math.sin(nextCoordinates[0])))
+    # Returns one pair of lat long coordinates in radians.
     return nextCoordinates
 
 
 
 # This function assumes angles are in radians.
-# Pass it the list of coordinates, the distance between flight lines, and the number of flight lines required
+# Pass it the list of coordinates, the distance between flight lines, and the number of flight lines required.
 def startingCoords(initCoords, lineDistance, numFlightLines):
 
-    # get the bearing of the short side of the rectangle from the haversine function
+    # Call the haversine function.
     haversineResult = haversine(initCoords)
     
-    # the bearing of the long (index 2) and short (index 3) sides are stored in separate variables
+    # The bearing of the long (index 2) and short (index 3) sides are stored in separate variables.
     bearingLong = haversineResult[2]
     bearingShort = haversineResult[3]
 
-    # this variable stores the opposite bearing of bearingLong, i.e. 180 degrees apart
+    # This variable stores the opposite bearing of bearingLong, i.e. 180 degrees apart.
     bearingLongOpposite = (bearingLong + math.pi) % (2 * math.pi)
 
-    # angular distance between flight lines
+    # Angular distance between flight lines.
     angularDistShort = lineDistance / radius
 
-    # angular distance of the long side of the rectangle
+    # Angular distance of the long side of the rectangle.
     angularDistLong = haversineResult[0] / radius
 
-    # if oneToTwo (index 4 of haversineResult) is true, then measure distance starting at point 2 towards point 3. If it is false, then use points 1 to 2.
+    # If oneToTwo (index 4 of haversineResult) is true, then measure flight lines starting at point 2 towards point 3. If it is false, then start at point 1 and go towards 2.
     if haversineResult[4]:
         start = initCoords[1]
     else:
         start = initCoords[0]
 
-    # declare list that will store the list of starting coordinates. The number of starting coordinates that will need to be calculated is the number of flight lines - 1
+    # Declare list that will store the list of starting coordinates. The number of starting coordinates that will need to be calculated is the number of flight lines - 1.
     startingCoordinates = []
+    # Append the coordinates of the corner of the rectangle, which will be the start location of the first flight line.
     startingCoordinates.append(start)
 
     
-    # This whole chunk of code is hard to explain without a diagram but I will try. 
+    # This next chunk of code is hard to explain without a diagram but I will try. 
     # Adjacent flight lines must start at opposite ends of the rectangle, as that will be the direction that the plane will be coming from after flying across it in one direction.
     # In order to calculate the starting coordinates of the next flight line, first an intermediate point must be calculated which is on the opposite side of the rectangle, 
-    # on a line parallel to the long side of the rectangle from the previous point. From here, the actual next starting point can be calculated.
+    # on the line parallel to the long side of the rectangle starting from the previous point. From this intermediate point, the next starting point can be calculated 
+    # by adding the distance between flight lines in the short bearing direction.
     # If the iterator x is an even number then the opposite of the long bearing must be used.
     for x in range(numFlightLines - 1):
         if x % 2 != 0:
@@ -159,6 +167,7 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
         startingCoordinates.append(destination)
         start = destination
 
+    # Convert radians back to degrees.
     degCoords = [[] for x in range(numFlightLines)]
     for x in range(len(startingCoordinates)):
         for y in range(len(startingCoordinates[x])):
@@ -679,5 +688,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
