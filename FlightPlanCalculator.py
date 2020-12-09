@@ -523,6 +523,7 @@ def Film_calcandoutput_loop():
             print("With an adjusted distance of ", adjustedgroundphotosep, " metres between photographs, the minimum number of photos per line is ", 
             photosperline, ". \n")
             print("The total number of photographs taken will be ", totalphotos, ".")
+            print("\n\n******************************************************************************\n\n")
 
             # Open output csv file and append the calculated values to a new row
             with open(output_path, "a") as output_data:
@@ -713,6 +714,7 @@ def Digital_calcandouput_loop():
             print("With an aircraft speed of ", speed, "km/h, time between exposures is ", exposuretime, " seconds.")
             print("With a distance of ", groundphotosep, " metres between photographs, the minimum number of photos per line is ", photosperline, ". \n")
             print("The total number of photographs taken will be ", totalphotos, ".")
+            print("\n\n******************************************************************************\n\n")
             # Open output csv and append the calculated values to a new row
             with open(output_path, "a") as output_data:
                 writer = csv.writer(output_data)
