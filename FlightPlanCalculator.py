@@ -424,7 +424,7 @@ def Film_calcandoutput_loop():
             scaleinput = scaleinput_list[index]
             filmformatsizeinput = filmformatsizeinput_list[index]
             elevation = elevation_list[index]
-            focallength = focallength_list[index] / 1000
+            focallength = focallength_list[index]
             endlap = endlap_list[index]
             sidelap = sidelap_list[index]
             speed = speed_list[index]
@@ -448,7 +448,7 @@ def Film_calcandoutput_loop():
             #Calcualte film camera specific variables
             scale = 1/scaleinput
             filmformatsize = filmformatsizeinput/1000
-            flyingheight = (focallength/scale)+elevation
+            flyingheight = (focallength/1000/scale)+elevation
             singleimagegc = filmformatsize/scale
             groundphotosep = (1-endlap)*singleimagegc
             exposuretime = math.floor((groundphotosep/speed)*(3600/1000))
