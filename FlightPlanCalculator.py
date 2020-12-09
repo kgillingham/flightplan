@@ -1,5 +1,6 @@
 # FlightPlanCalculator.py
 # Last modified 9-Dec-2020
+# Online Group 6
 # Authors - Kazuto Gillingham, Lucy Lin, Sarah Griffiths
  
 # Program Purpose and Use:
