@@ -1,32 +1,56 @@
 # FlightPlanCalculator.py
-# Last modified 8-Dec-2020
+# Last modified 9-Dec-2020
 # Authors - Kazuto Gillingham, Lucy Lin, Sarah Griffiths
 
-### Contribution to application?? ### how is this different to implementation?
 
+# Program Purpose and Use:
 # Calulates the flight plan of an aerial photography remote sensing mission
 # calculates the location, direction, flying height, and number of flight lines 
 # required to photograph an area
 # Input in the form of a csv file and also keyboard input of camera type
 # Outputs displayed on screen and in a CSV file
 
-### Program Structure ###
+# Program Summary:
 
+# Assumptions Affecting Program Strcture:
 # It is assumed that terrain elevation does not change over the study area (we use "Average Terrain Elevation")
 # It is assumed that the flying height of the aircraft stays constant over the study area.
 # It is only possible to input a csv with one record whereas in flight planning, multiple flights would be planned at once.
 
-### special cases?? ###
-
+# Special Cases and Known Problems:
 # During data validation, if the inputs are not suitable, the program ends. 
 # This causes an issue if the FlightPlan-(CameraType)Output.csv is not deleted before the program is run again as
 # the program will write a second row of headers, followed by the data inputs and calculations.
 
-### INPUTs and OUTPUTs###
+# Inputs:
+# Camera Type (Digital/Film)
+# Focal Length
+# Average Terrain Elevation
+# Desired Endlap
+# Desired Sidelap
+# Aircraft Speed
+# Four Pairs of Coordinates representing the 4 corners of study area
+# Film Format (Film Only)
+# Scale (Film Only)
+# Across Track Array Pixel Amount (Digital Only)
+# Along Track Array Pixel Amount (Digital Only)
+# Physical Pixel Size (Digital Only)
+# Ground Sampling Distance (Digital Only)
 
-### Citations ###
+# Outputs:
+# Flying Height Above Terrain
+# Flying Height Above Sea Level
+# Miniumum Number of Flight Lines
+# Distance Between Flight Lines
+# Total Number of Photos
+# Total Number of Photos Per Line
+# Starting Coordinates of Each Flight Line
+
+
+# Citations and Resources:
 # Lillesand, T.M., Kiefer, R.W., Chipman, J.W. (2018). Remote Sensing And Image Interpretation – Seventh Edition. Wiley.
 
+# Division of Work: 
 # Kazuto - haversine, destinationPoint, and startingCoords functions
 # Lucy - 
 # Sarah - User verification that csv data in appropriate ranges/units. Data Validation. Error Handling. Creation of empty lists for variables
@@ -47,7 +71,7 @@ elevation_list = []                # create empty list for elevation
 endlap_list = []                   # create empty list for endlap
 sidelap_list = []                  # create empty list for sidelap
 speed_list = []                    # create empty list for speed
-coords_list = [[] for x in range(4)]                        # create empty list to store pairs of coordinates
+coords_list = [[] for x in range(4)]       # create empty list to store pairs of coordinates
 
 # Lists for Film
 filmformatsizeinput_list = []      # create empty list for film format size input
@@ -525,7 +549,7 @@ def Digital_calcandouput_loop():
             pixelCheck = False
             break
     # Check Ground Sampling Distance
-    gsdLow, gsdHigh = 0, 20
+    gsdLow, gsdHigh = 0, 25.99
     gsdCheck = True
     for item in gsd_list:
         if item < gsdLow or item > gsdHigh:
@@ -571,7 +595,7 @@ def Digital_calcandouput_loop():
         print("Physical Pixel Size must be greater than 7mm and less than 501mm.")
         print("Please check your data inputs.")
     elif gsdCheck == False :
-        print("Ground Sampling Distance must be greater than 0cm and less than 2601cm.")
+        print("Ground Sampling Distance must be greater than 0m and less than 26m.")
         print("Please check your data inputs.")
     elif latCheck == False:
         print("Latitudes must be greater than -91 degrees and less than 91 degrees.")
