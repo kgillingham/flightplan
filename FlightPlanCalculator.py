@@ -1,27 +1,26 @@
 # FlightPlanCalculator.py
 # Last modified 9-Dec-2020
 # Authors - Kazuto Gillingham, Lucy Lin, Sarah Griffiths
-
-
+ 
 # Program Purpose and Use:
 # Calulates the flight plan of an aerial photography remote sensing mission
 # calculates the location, direction, flying height, and number of flight lines 
 # required to photograph an area
 # Input in the form of a csv file and also keyboard input of camera type
 # Outputs displayed on screen and in a CSV file
-
+ 
 # Program Summary:
-
+ 
 # Assumptions Affecting Program Strcture:
 # It is assumed that terrain elevation does not change over the study area (we use "Average Terrain Elevation")
 # It is assumed that the flying height of the aircraft stays constant over the study area.
 # It is only possible to input a csv with one record whereas in flight planning, multiple flights would be planned at once.
-
+ 
 # Special Cases and Known Problems:
 # During data validation, if the inputs are not suitable, the program ends. 
 # This causes an issue if the FlightPlan-(CameraType)Output.csv is not deleted before the program is run again as
 # the program will write a second row of headers, followed by the data inputs and calculations.
-
+ 
 # Inputs:
 # Camera Type (Digital/Film)
 # Focal Length
@@ -36,7 +35,8 @@
 # Along Track Array Pixel Amount (Digital Only)
 # Physical Pixel Size (Digital Only)
 # Ground Sampling Distance (Digital Only)
-
+# A csv file containing the above information
+ 
 # Outputs:
 # Flying Height Above Terrain
 # Flying Height Above Sea Level
@@ -45,10 +45,23 @@
 # Total Number of Photos
 # Total Number of Photos Per Line
 # Starting Coordinates of Each Flight Line
-
-
+# A csv file containing the above inputs and outputs
+ 
 # Citations and Resources:
 # Lillesand, T.M., Kiefer, R.W., Chipman, J.W. (2018). Remote Sensing And Image Interpretation – Seventh Edition. Wiley.
+# Chris Veness, W. (n.d.). Movable Type Scripts. Retrieved November 13, 2020, 
+#       from https://www.movable-type.co.uk/scripts/latlong.html
+# Ruzgiene, B. (2004). Requirements for aerial photography. Geodezija ir Kartografija, 30(3), 75-79. 
+#       from https://doi.org/10.1080/13921541.2004.9636646
+# Abdullah, Q. A. (n.d.). Designing a Flight Route. Retrieved November 13, 2020, 
+#       from https://www.e-education.psu.edu/geog892/node/658
+# Propeller Aerobotics Pty Ltd. (2019, December 20). (Ground Sample Distance) GSD Calculator. Retrieved December 09, 2020, 
+#       from https://www.propelleraero.com/gsd-calculator/
+# manjeet_04 (2020, January 3). Python – Test if List contains elements in Range. Retrieved December 06, 2020, 
+#       from https://www.geeksforgeeks.org/python-test-if-list-contains-elements-in-range/
+# csv module documentation 
+#       from https://docs.python.org/3/library/csv.html 
+
 
 # Division of Work: 
 # Kazuto - haversine, destinationPoint, and startingCoords functions
