@@ -1,11 +1,36 @@
 # FlightPlanCalculator.py
-# Last modified by Sarah Griffiths, 6-Dec-2020
+# Last modified 8-Dec-2020
+# Authors - Kazuto Gillingham, Lucy Lin, Sarah Griffiths
+
+### Contribution to application?? ### how is this different to implementation?
 
 # Calulates the flight plan of an aerial photography remote sensing mission
 # calculates the location, direction, flying height, and number of flight lines 
 # required to photograph an area
 # Input in the form of a csv file and also keyboard input of camera type
 # Outputs displayed on screen and in a CSV file
+
+### Program Structure ###
+
+# It is assumed that terrain elevation does not change over the study area (we use "Average Terrain Elevation")
+# It is assumed that the flying height of the aircraft stays constant over the study area.
+# It is only possible to input a csv with one record whereas in flight planning, multiple flights would be planned at once.
+
+### special cases?? ###
+
+# During data validation, if the inputs are not suitable, the program ends. 
+# This causes an issue if the FlightPlan-(CameraType)Output.csv is not deleted before the program is run again as
+# the program will write a second row of headers, followed by the data inputs and calculations.
+
+### INPUTs and OUTPUTs###
+
+### Citations ###
+# Lillesand, T.M., Kiefer, R.W., Chipman, J.W. (2018). Remote Sensing And Image Interpretation – Seventh Edition. Wiley.
+
+# Kazuto - 
+# Lucy - 
+# Sarah - User verification that csv data in appropriate ranges/units. Data Validation. Error Handling. Creation of empty lists for variables
+
 
 # import math module for various trigonmetric functions
 # import csv module to read and write csv files
@@ -146,7 +171,9 @@ def startingCoords(initCoords, lineDistance, numFlightLines):
 # Input loop if cameratype is Film
 def Film_input_loop():
     print()
-    # Ensure user has prepared csv correctly prior to import
+    # Ensure user has prepared csv correctly prior to import, primarly concerning units of measure
+    # This is done as an outside "data validation" to double check that the user understands what is required to run the program
+    # Having the user verify the data before import prevents the need to start program over and delete csv created before validation    
     print("Prior to importing this program, please ensure your data has been entered following the requirements:")
     print("Focal Length = mm (e.g. 152.4)")
     print("Average Terrain Elevation Above Datum = metres above sea level (e.g. 300)")
@@ -160,7 +187,8 @@ def Film_input_loop():
     print()
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
-
+    # If user enters Y/y the program will proceed to read the input from their csv, otherwise it will end
+    # Program ends instead of loops because the process of checking the data could be lengthy
     if userready.upper() == "Y":
         input_path = str(input("Please enter the path to your input data csv file:  "))
         with open(input_path, "r") as input_data:
@@ -199,7 +227,10 @@ def Film_input_loop():
 
 
 def Digital_input_loop():  
-    print()      
+    print()
+    # Ensure user has prepared csv correctly prior to import, primarly concerning units of measure
+    # This is done as an outside "data validation" to double check that the user understands what is required to run the program
+    # Having the user verify the data before import prevents the need to start program over and delete csv created before validation      
     print("Focal Length = mm (e.g. 152.4)")
     print("Average Terrain Elevation Above Datum = metres above sea level (e.g. 300)")        
     print("Endlap = percantage as decimal (e.g. 0.60)")
@@ -214,7 +245,8 @@ def Digital_input_loop():
     print()  
     userready = input("Are you ready to import your csv and begin flight planning? (Y/N): ")
     print()
-
+    # If user enters Y/y the program will proceed to read the input from their csv, otherwise it will end
+    # Program ends instead of loops because the process of checking the data could be lengthy
     if userready.upper() == "Y":
         input_path = str(input("Please enter the path to your input data csv file:  "))
         with open(input_path, "r") as input_data:
@@ -256,6 +288,11 @@ def Digital_input_loop():
 
 def Film_calcandoutput_loop():
     # Data validation for film inputs
+    # This segement of code establishes the acceptable ranges for each input variable and checks that the variable values are valid
+    # (variable)Low and (variable)High are estbalished and the list items are checked against them
+    # If the items are out of range, the (variable)Check is stored as False, having failed the validation check
+    # This section is able to check csv files with multiple records
+
     # Check Focal Length
     focalLow, focalHigh = 3, 900
     focalCheck = True
@@ -318,8 +355,9 @@ def Film_calcandoutput_loop():
         or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
         longCheck = False   
 
-    # Indentify False checks and print message to user 
-    #### (if this doesnt work, it could be if focal = false, else: if eleveation = false, etc) Please let me know what you think
+    # Identify False checks and print message to user 
+    # If any of the checks were assigned False, the following messages are printed to the user
+    # The program ends if any checks are failed, otherwise the code proceeds to calculations
     if focalCheck == False :
         print("Focal Length must be greater than 7mm and less than 901mm.")
         print("Please check your data inputs.")
@@ -416,6 +454,11 @@ def Film_calcandoutput_loop():
 
 def Digital_calcandouput_loop():
     # Data validation for film inputs
+    # This segement of code establishes the acceptable ranges for each input variable and checks that the variable values are valid
+    # (variable)Low and (variable)High are estbalished and the list items are checked against them
+    # If the items are out of range, the (variable)Check is stored as False, having failed the validation check
+    # This section is able to check csv files with multiple records
+
     # Check Focal Length
     focalLow, focalHigh = 3, 900
     focalCheck = True
@@ -473,7 +516,7 @@ def Digital_calcandouput_loop():
             pixelCheck = False
             break
     # Check Ground Sampling Distance
-    gsdLow, gsdHigh = 0, 2000
+    gsdLow, gsdHigh = 0, 20
     gsdCheck = True
     for item in gsd_list:
         if item < gsdLow or item > gsdHigh:
@@ -490,9 +533,10 @@ def Digital_calcandouput_loop():
     longCheck = True
     if coords_list[0][1] < longLow or coords_list[0][1] > longHigh or coords_list[1][1] < longLow or coords_list[1][1] > longHigh \
     or coords_list[2][1] < longLow or coords_list[2][1] > longHigh or coords_list[3][1] < longLow or coords_list[3][1] > longHigh:
-        longCheck = False                   
-    # Indentify False checks and print message to user 
-    ### (if this doesnt work, it could be if focal = false, else: if eleveation = false, etc) Please let me know what you think
+        longCheck = False              
+    # Identify False checks and print message to user 
+    # If any of the checks were assigned False, the following messages are printed to the user
+    # The program ends if any checks are failed, otherwise the code proceeds to calculations
     if focalCheck == False :
         print("Focal Length must be greater than 2mm and less than 901mm.")
         print("Please check your data inputs.")
@@ -596,10 +640,11 @@ def Digital_calcandouput_loop():
 
 
 def main():
+    # Exception handling takes place once the main function is called
+    # It is known that null values in the csv file will cause a ValueError
     #try:
     
-    # Indent following code once ready to use try:
-    # Display Program Purpose
+    # Display Program Purpose to the user
     print("This program will aid the designing process of an aerial photography remote sensing mission.") 
     print("Specifically, this program will calculate the location, direction, and number of flight lines")
     print("necessary to adequately photograph a given area, as well as the elevation at which the aircraft should fly.")
@@ -616,17 +661,15 @@ def main():
         Digital_input_loop()
         Digital_calcandouput_loop()
 
-    ## Error handling here ##
-    # We can make these more specific. Just copied from Whale Mapping for now. Commented out so we can test code
-
-    # Add exceptions to try condition for any errors that might occur
-    # Display error as message
+    # The following exceptions were added to try condition to catch any errors that might occur
+    # The errors are displayed as a message, with an addition for ValueError
     # except TypeError as message:
     #     print(" There was an error: ", message)
     # except NameError as message:
     #     print(" There was an error: ", message)
     # except ValueError as message:
     #     print(" There was an error: ", message)
+    #     print(" A ValueError may result from the occurence of null values in the csv.")
     # except SyntaxError as message: 
     #     print(" There was an error: ", message)
     # except RuntimeError as message:
