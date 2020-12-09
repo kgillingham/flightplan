@@ -71,7 +71,7 @@ elevation_list = []                # create empty list for elevation
 endlap_list = []                   # create empty list for endlap
 sidelap_list = []                  # create empty list for sidelap
 speed_list = []                    # create empty list for speed
-coords_list = [[] for x in range(16)]       # create empty list to store pairs of coordinates
+coords_list = None       # create empty list to store pairs of coordinates
 
 # Lists for Film
 filmformatsizeinput_list = []      # create empty list for film format size input
@@ -233,6 +233,11 @@ def Film_input_loop():
             input_read = csv.reader(input_data)
             # Skips over first record, which are the headers 
             next(input_read)
+            lines = len(list(input_read))
+            input_data.seek(0)
+            next(input_read)
+            global coords_list
+            coords_list = [[] for row in range(lines * 4)]
             x = 0
             for record in input_read:
                 focallength_list.append(float(record[0]))
@@ -298,6 +303,11 @@ def Digital_input_loop():
         with open(input_path, "r") as input_data:
             input_read = csv.reader(input_data)
             next(input_read)
+            lines = len(list(input_read))
+            input_data.seek(0)
+            next(input_read)
+            global coords_list
+            coords_list = [[] for row in range(lines * 4)]
             x = 0
             for record in input_read:
                 focallength_list.append(float(record[0]))
