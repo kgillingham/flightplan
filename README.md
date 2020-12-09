@@ -9,3 +9,7 @@ The program can handle multiple scenarios. When you input multiple rows
 make sure there are no empty rows between them.
 
 The output data will be in a file called FlightPlan-DigitalOutput.csv or FlightPlan-FilmOutput.csv.
+
+
+**** NOTE FOR KAREN: ****
+The input CSV's already have some test values in them. You can either add to it or replace them with your own.
